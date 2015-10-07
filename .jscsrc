@@ -1,0 +1,71 @@
+additionalRules: [./test/jscs/rules/*.js]
+disallowDanglingUnderscores: true
+disallowEmptyBlocks: true
+disallowKeywords: [with]
+disallowKeywordsInComments: true
+disallowKeywordsOnNewLine: [catch, else, while]
+disallowMixedSpacesAndTabs: true
+disallowMultiLineTernary: true
+disallowMultipleLineBreaks: true
+disallowMultipleLineStrings: true
+disallowMultipleSpaces: true
+disallowMultipleVarDecl: strict
+disallowNewlineBeforeBlockStatements: true
+disallowNodeTypes: [LabeledStatement]
+disallowOperatorBeforeLineBreak: true
+disallowPaddingNewlinesInBlocks: true
+disallowQuotedKeysInObjects: true
+disallowSpaceAfterObjectKeys: true
+disallowSpaceAfterPrefixUnaryOperators: true
+disallowSpaceBeforeComma: true
+disallowSpaceBeforePostfixUnaryOperators: true
+disallowSpaceBeforeSemicolon: true
+disallowSpacesInCallExpression: true
+disallowSpacesInFunctionDeclaration: { beforeOpeningRoundBrace: true }
+disallowSpacesInsideArrayBrackets: true
+disallowSpacesInsideParentheses: true
+disallowSpacesInsideParenthesizedExpression: true
+disallowTabs: true
+disallowTrailingComma: true
+disallowTrailingWhitespace: true
+disallowYodaConditions: true
+esnext: true
+requireBlocksOnNewline: 1
+requireCamelCaseOrUpperCaseIdentifiers: false
+requireCapitalizedComments: { allExcept: [eslint] }
+requireCapitalizedConstructors: true
+requireCommaBeforeLineBreak: true
+requireCurlyBraces: true
+requireDotNotation: true
+requireLineBreakAfterVariableAssignment: true
+requireLineFeedAtFileEnd: true
+requireMatchingFunctionName: true
+requirePaddingNewLineAfterVariableDeclaration: true
+requirePaddingNewLinesAfterBlocks: true
+requirePaddingNewLinesAfterUseStrict: true
+requirePaddingNewLinesBeforeExport: true
+requirePaddingNewlinesBeforeKeywords: [case, do, finally, for, if, return, switch, try, typeof, void, while, with]
+requirePaddingNewLinesBeforeLineComments: { allExcept: firstAfterCurly }
+requireParenthesesAroundIIFE: true
+requireSemicolons: true
+requireSpaceAfterBinaryOperators: true
+requireSpaceAfterKeywords: [case, catch, do, finally, for, if, return, switch, try, typeof, while, with]
+requireSpaceAfterLineComment: true
+requireSpaceBeforeBinaryOperators: true
+requireSpaceBeforeBlockStatements: true
+requireSpaceBeforeKeywords: [catch, else, while]
+requireSpaceBeforeObjectValues: true
+requireSpaceBetweenArguments: true
+requireSpacesInAnonymousFunctionExpression: { beforeOpeningCurlyBrace: true }
+requireSpacesInConditionalExpression: true
+requireSpacesInForStatement: true
+requireSpacesInsideObjectBrackets: all
+requireSpread: true
+requireTemplateStrings: true
+safeContextKeyword: self
+validateCommentPosition: { position: above }
+validateIndentation: 2
+validateLineBreaks: LF
+validateOrderInObjectKeys: asc
+validateParameterSeparator: ", "
+validateQuoteMarks: "'"

@@ -1,0 +1,47 @@
+{
+  "name": "tin",
+  "version": "0.0.1",
+  "description": "Taxpayer Identification Number",
+  "main": "dist/index.js",
+  "homepage": "https://github.com/seegno/tin",
+  "bugs": "https://github.com/seegno/tin/issues",
+  "repository": "seegno/tin",
+  "keywords": [
+    "EIN",
+    "IRS",
+    "ITIN",
+    "SSN",
+    "TIN"
+  ],
+  "options": {
+    "mocha": "--compilers js:babel/register --recursive --require should test"
+  },
+  "scripts": {
+    "build": "rm -rf dist/* && babel src/ --loose --optional asyncToGenerator --out-dir dist/",
+    "changelog": "github_changelog_generator --no-issues",
+    "cover": "babel-node ./node_modules/.bin/isparta cover --report html _mocha -- $npm_package_options_mocha",
+    "coveralls": "babel-node ./node_modules/.bin/isparta cover --report html _mocha --report lcovonly -- $npm_package_options_mocha && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "lint": "eslint src test && jscs src test",
+    "prepublish": "npm run lint && npm test && npm run build",
+    "test": "NODE_ENV=test mocha $npm_package_options_mocha"
+  },
+  "author": "Seegno",
+  "license": "MIT",
+  "dependencies": {
+    "is-valid-ein": "git+https://git@github.com/seegno/is-valid-ein#feature/ein-validation",
+    "is-valid-itin": "git+https://git@github.com/seegno/is-valid-itin#feature/itin-validation",
+    "is-valid-ssn": "git+https://git@github.com/seegno-forks/is-valid-ssn#feature/add-mask-ssn"
+  },
+  "devDependencies": {
+    "babel": "5.8.23",
+    "babel-eslint": "4.1.0",
+    "coveralls": "2.11.4",
+    "eslint": "1.5.1",
+    "eslint-plugin-babel": "2.1.1",
+    "isparta": "3.0.4",
+    "jscs": "2.2.1",
+    "mocha": "2.3.3",
+    "should": "7.1.0",
+    "sinon": "^1.17.1"
+  }
+}
