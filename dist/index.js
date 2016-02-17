@@ -71,7 +71,7 @@ function mask(tin) {
     throw new Error('Invalid Taxpayer Identification Number');
   }
 
-  const tinType = type(tin);
+  var tinType = type(tin);
 
   if (tinType === 'ein') {
     return (0, _isValidEin.mask)(tin);
