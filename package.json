@@ -26,9 +26,9 @@
     "test": "NODE_ENV=test mocha $npm_package_options_mocha"
   },
   "dependencies": {
-    "is-valid-ein": "seegno/is-valid-ein#0.0.1",
-    "is-valid-itin": "seegno/is-valid-itin#0.0.1",
-    "is-valid-ssn": "seegno/is-valid-ssn#0.0.1"
+    "is-valid-ein": "seegno/is-valid-ein#0.0.2",
+    "is-valid-itin": "seegno/is-valid-itin#0.0.2",
+    "is-valid-ssn": "seegno/is-valid-ssn#0.0.2"
   },
   "devDependencies": {
     "babel-cli": "^6.4.5",
