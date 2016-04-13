@@ -9,68 +9,44 @@
  * Module dependencies
  */
 
-import { default as isValidEin, mask as maskEin } from 'is-valid-ein';
-import { default as isValidItin, mask as maskItin } from 'is-valid-itin';
-import { default as isValidSsn, mask as maskSsn } from 'is-valid-ssn';
+import { isValid as isValidEin, mask as maskEin } from 'ein-validator';
+import { isValid as isValidItin, mask as maskItin } from 'itin-validator';
+import { isValid as isValidSsn, mask as maskSsn } from 'ssn-validator';
 
 /**
- * Export isValid function.
+ * Export `isValid` function.
  */
 
-export function isValid(tin) {
-  return isValidEin(tin) || isValidItin(tin) || isValidSsn(tin);
+export function isValid(value) {
+  return isValidSsn(value) || isValidItin(value) || isValidEin(value);
 }
 
 /**
- * Export type function.
- *
- * NOTE: This is a best effort guess. There are numbers which are compliant with multiple tin validators.
+ * Export `mask` funtion.
  */
 
-export function type(tin) {
-  if (isValidSsn(tin)) {
-    return 'ssn';
-  }
-
-  if (isValidItin(tin)) {
-    return 'itin';
-  }
-
-  if (isValidEin(tin)) {
-    return 'ein';
-  }
-
-  return;
-}
-
-/**
- * Export mask funtion.
- */
-
-export function mask(tin) {
-  if (!isValid(tin)) {
+export function mask(value) {
+  if (!isValid(value)) {
     throw new Error('Invalid Taxpayer Identification Number');
   }
 
-  const tinType = type(tin);
-
-  if (tinType === 'ein') {
-    return maskEin(tin);
+  if (isValidEin(value)) {
+    return maskEin(value);
   }
 
-  if (tinType === 'itin') {
-    return maskItin(tin);
+  if (isValidItin(value)) {
+    return maskItin(value);
   }
 
-  if (tinType === 'ssn') {
-    return maskSsn(tin);
+  if (isValidSsn(value)) {
+    return maskSsn(value);
   }
 }
 
 /**
- * Sanitize tin.
+ * Sanitize value.
  */
 
-export function sanitize(tin) {
-  return String(tin).replace(/[^0-9]+/g, '');
+export function sanitize(value) {
+  return String(value).replace(/\D+/g, '');
 }
