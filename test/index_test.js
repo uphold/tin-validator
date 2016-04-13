@@ -3,86 +3,95 @@
  * Module dependencies.
  */
 
-import { isValid, mask, type } from '../src';
-import * as isValidEin from 'is-valid-ein';
-import * as isValidItin from 'is-valid-itin';
-import * as isValidSsn from 'is-valid-ssn';
-import sinon from 'sinon';
+import * as einValidator from 'ein-validator';
+import * as itinValidator from 'itin-validator';
+import * as ssnValidator from 'ssn-validator';
+import * as tinValidator from '../src';
 import should from 'should';
+import sinon from 'sinon';
+
+/**
+ * Test sandbox.
+ */
+
+const sandbox = sinon.sandbox.create();
+
+/**
+ * Supported validators.
+ */
+
+const validators = {
+  ein: einValidator,
+  itin: itinValidator,
+  ssn: ssnValidator
+};
 
 /**
  * Test.
  */
 
-describe('tin', () => {
-  const ein = '666234567';
-  const itin = '900700000';
-  const ssn = '031234567';
+describe('TinValidator', () => {
+  afterEach('sinon-hook', () => {
+    sandbox.restore();
+  });
 
   describe('isValid()', () => {
-    it('should return `false` is `tin` is invalid', () => {
-      isValid('foobar').should.be.false();
+    it('should return false is value is invalid', () => {
+      tinValidator.isValid('foobar').should.be.false();
     });
 
-    it('should return `true` is `tin` is a valid `ein`', () => {
-      isValid(ein).should.be.true();
-    });
+    Object.keys(validators).forEach((type) => {
+      it(`should check if value is a valid ${type} using the given value and options`, () => {
+        const args = ['foobar', { foo: 'bar' }];
 
-    it('should return `true` is `tin` is a valid `itin`', () => {
-      isValid(itin).should.be.true();
-    });
+        sandbox.stub(validators[type], 'isValid');
 
-    it('should return `true` is `tin` is a valid `ssn`', () => {
-      isValid(ssn).should.be.true();
+        tinValidator.isValid(...args);
+
+        validators[type].isValid.callCount.should.equal(1);
+        validators[type].isValid.firstCall.args.should.eql(args);
+      });
+
+      it(`should return true is value is a valid ${type}`, () => {
+        sandbox.stub(validators[type], 'isValid').returns(true);
+
+        tinValidator.isValid('foobar').should.be.true();
+      });
     });
   });
 
   describe('mask()', () => {
-    it('should throw an error if `tin` is invalid', () => {
-      try {
-        mask('foobar');
-
-        should.fail();
-      } catch (e) {
-        e.should.be.instanceOf(Error);
-        e.message.should.equal('Invalid Taxpayer Identification Number');
-      }
+    it('should return undefined if number is invalid', () => {
+      should.not.exist(tinValidator.mask('foobar'));
     });
 
-    it('should return a masked `ein`', () => {
-      sinon.stub(isValidEin, 'mask').returns('foo');
+    Object.keys(validators).forEach((type) => {
+      it(`should mask a valid ${type}`, () => {
+        sandbox.stub(tinValidator, 'type').returns(type);
+        sandbox.stub(validators[type], 'mask').returns('foo');
 
-      mask(ein).should.equal('foo');
+        tinValidator.mask('bar').should.equal('foo');
+      });
     });
+  });
 
-    it('should return a masked `itin`', () => {
-      sinon.stub(isValidItin, 'mask').returns('foo');
-
-      mask(itin).should.equal('foo');
-    });
-
-    it('should return a masked `ssn`', () => {
-      sinon.stub(isValidSsn, 'mask').returns('foo');
-
-      mask(ssn).should.equal('foo');
+  describe('sanitize()', () => {
+    it('should return a sanited number', () => {
+      tinValidator.sanitize('123a- 12B-3123_!#$%&*?').should.equal('123123123');
     });
   });
 
   describe('type()', () => {
-    it('should return `undefined` is `tin` is invalid', () => {
-      should.not.exist(type('foobar'));
+    it('should return undefined if number is invalid', () => {
+      should.not.exist(tinValidator.type('foobar'));
     });
 
-    it('should return `true` is `tin` is a valid `ein`', () => {
-      type(ein).should.equal('ein');
-    });
+    Object.keys(validators).forEach((type) => {
+      it(`should return ${type} if value is a valid ${type}`, () => {
+        sandbox.stub(validators[type], 'isValid').returns(true);
 
-    it('should return `true` is `tin` is a valid `itin`', () => {
-      type(itin).should.equal('itin');
-    });
-
-    it('should return `true` is `tin` is a valid `ssn`', () => {
-      type(ssn).should.equal('ssn');
+        tinValidator.type('foobar').should.equal(type);
+      });
     });
   });
 });
