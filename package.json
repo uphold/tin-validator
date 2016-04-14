@@ -1,6 +1,6 @@
 {
   "name": "tin-validator",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "description": "Taxpayer Identification Number validator and masker",
   "keywords": [
     "EIN",
