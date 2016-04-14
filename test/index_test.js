@@ -3,22 +3,22 @@
  * Module dependencies.
  */
 
-import { isValid, mask, type } from '../src';
-import * as isValidEin from 'is-valid-ein';
-import * as isValidItin from 'is-valid-itin';
-import * as isValidSsn from 'is-valid-ssn';
-import sinon from 'sinon';
 import should from 'should';
+import { isValid, mask, sanitize } from '../src';
+
+/**
+ * Sample numbers.
+ */
+
+const ein = '66-0000000';
+const itin = '969-88-9999';
+const ssn = '001-23-4567';
 
 /**
  * Test.
  */
 
-describe('tin', () => {
-  const ein = '666234567';
-  const itin = '900700000';
-  const ssn = '031234567';
-
+describe('tin-validator', () => {
   describe('isValid()', () => {
     it('should return `false` is `tin` is invalid', () => {
       isValid('foobar').should.be.false();
@@ -50,39 +50,21 @@ describe('tin', () => {
     });
 
     it('should return a masked `ein`', () => {
-      sinon.stub(isValidEin, 'mask').returns('foo');
-
-      mask(ein).should.equal('foo');
+      mask(ein).should.equal('XX-XXX0000');
     });
 
     it('should return a masked `itin`', () => {
-      sinon.stub(isValidItin, 'mask').returns('foo');
-
-      mask(itin).should.equal('foo');
+      mask(itin).should.equal('XXX-XX-9999');
     });
 
     it('should return a masked `ssn`', () => {
-      sinon.stub(isValidSsn, 'mask').returns('foo');
-
-      mask(ssn).should.equal('foo');
+      mask(ssn).should.equal('XXX-XX-4567');
     });
   });
 
-  describe('type()', () => {
-    it('should return `undefined` is `tin` is invalid', () => {
-      should.not.exist(type('foobar'));
-    });
-
-    it('should return `true` is `tin` is a valid `ein`', () => {
-      type(ein).should.equal('ein');
-    });
-
-    it('should return `true` is `tin` is a valid `itin`', () => {
-      type(itin).should.equal('itin');
-    });
-
-    it('should return `true` is `tin` is a valid `ssn`', () => {
-      type(ssn).should.equal('ssn');
+  describe('sanitize()', () => {
+    it('should remove all no numeric characters', () => {
+      sanitize('az0Z1<2*3#4---5  6%7&8/9?').should.equal('0123456789');
     });
   });
 });
