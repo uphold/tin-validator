@@ -67,7 +67,7 @@ mask('900700000');
 --------------------------------------------------------------------------------
 
 ### `sanitize(value)`
-This method will remove all non numeric characters from the value.
+This method will remove all nonnumeric characters from the value.
 
 #### Arguments
 1. `value` _(*)_: The value to sanitize.
