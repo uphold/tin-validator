@@ -36,7 +36,7 @@
   "dependencies": {
     "ein-validator": "^1.0.0",
     "itin-validator": "^1.0.0",
-    "ssn-validator": "^2.0.1"
+    "ssn-validator": "git+ssh://git@github.com/uphold/ssn-validator#feature/improve-tin-validator"
   },
   "devDependencies": {
     "babel-cli": "^6.4.0",
