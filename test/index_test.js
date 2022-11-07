@@ -13,6 +13,7 @@ import { isValid, mask, sanitize } from '../src';
 const ein = '66-0000000';
 const itin = '969-88-9999';
 const ssn = '001-23-4567';
+const invalidTin = ['123456789', '1234567890', '0123456789', '9012345678', '987654321', '876543210', '111111111', 'foobar'];
 
 /**
  * Test.
@@ -21,7 +22,7 @@ const ssn = '001-23-4567';
 describe('tin-validator', () => {
   describe('isValid()', () => {
     it('should return `false` is `tin` is invalid', () => {
-      isValid('foobar').should.be.false();
+      invalidTin.forEach(number => isValid(number).should.be.false());
     });
 
     it('should return `true` is `tin` is a valid `ein`', () => {
