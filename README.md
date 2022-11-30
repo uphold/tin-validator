@@ -103,7 +103,7 @@ docker-compose run --rm sut
 ## Release
 
 ```sh
-npm version [<newversion> | major | minor | patch] -m "Release %s"
+npm version [<newversion> | major | minor | patch] --message "Release %s"
 ```
 
 ## License
