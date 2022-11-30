@@ -14,15 +14,17 @@ var _itinValidator = require('itin-validator');
 var _ssnValidator = require('ssn-validator');
 
 /**
- * Export `isValid` function.
+ * Excludes repeated numbers as TIN e.g. 111111111.
  */
 
-function isValid(value) {
-  return (0, _ssnValidator.isValid)(value) || (0, _itinValidator.isValid)(value) || (0, _einValidator.isValid)(value);
-}
+var repeatedNumbers = Array.from({ length: 10 }, function (_, i) {
+  return i;
+}).map(function (current) {
+  return String(current).repeat(9);
+});
 
 /**
- * Export `mask` funtion.
+ * Excludes ascending and descending sequence as TIN e.g. 123456789.
  */
 
 /**
@@ -33,6 +35,35 @@ function isValid(value) {
 
 /**
  * Module dependencies
+ */
+
+var sequence = Array.from({ length: 10 }, function (_, i) {
+  return i;
+}).reduce(function (acc, current) {
+  return acc + current;
+}, '').repeat(2);
+var reverseSequence = sequence.split('').reverse().join('');
+
+/**
+ * Export `isValid` function.
+ */
+
+function isValid(value) {
+  var sanitizedValue = value.replace(/\D/g, '');
+
+  if (repeatedNumbers.indexOf(sanitizedValue) !== -1) {
+    return false;
+  }
+
+  if (sequence.includes(sanitizedValue) || reverseSequence.includes(sanitizedValue)) {
+    return false;
+  }
+
+  return (0, _ssnValidator.isValid)(value) || (0, _itinValidator.isValid)(value) || (0, _einValidator.isValid)(value);
+}
+
+/**
+ * Export `mask` funtion.
  */
 
 function mask(value) {

@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.1.0](https://github.com/uphold/tin-validator/releases/tag/v1.1.0) (2022-11-30)
+- Add github-changelog-generator as dev dependency [\#13](https://github.com/uphold/tin-validator/pull/13) ([diogotorres97](https://github.com/diogotorres97))
+- Improve TIN validator [\#12](https://github.com/uphold/tin-validator/pull/12) ([KevinUphold](https://github.com/KevinUphold))
+- Add MIT license [\#9](https://github.com/uphold/tin-validator/pull/9) ([NelsonBrandao](https://github.com/NelsonBrandao))
+
 ## [v1.0.0](https://github.com/seegno/tin-validator/tree/v1.0.0) (2016-04-14)
 [Full Changelog](https://github.com/seegno/tin-validator/compare/0.0.2...v1.0.0)
 
@@ -14,4 +19,3 @@
 
 - Bump dependencies [\#4](https://github.com/seegno/tin-validator/pull/4) ([ruimarinho](https://github.com/ruimarinho))
 - Update `es2015-node4` to `es2015` [\#3](https://github.com/seegno/tin-validator/pull/3) ([ruipenso](https://github.com/ruipenso))
-
