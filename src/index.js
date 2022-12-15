@@ -41,11 +41,11 @@ export function isValid(value) {
     return false;
   }
 
-  return isValidSsn(value) || isValidItin(value) || isValidEin(value);
+  return isValidSsn(sanitizedValue) || isValidItin(sanitizedValue) || isValidEin(sanitizedValue);
 }
 
 /**
- * Export `mask` funtion.
+ * Export `mask` function.
  */
 
 export function mask(value) {
