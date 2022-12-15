@@ -59,11 +59,11 @@ function isValid(value) {
     return false;
   }
 
-  return (0, _ssnValidator.isValid)(value) || (0, _itinValidator.isValid)(value) || (0, _einValidator.isValid)(value);
+  return (0, _ssnValidator.isValid)(sanitizedValue) || (0, _itinValidator.isValid)(sanitizedValue) || (0, _einValidator.isValid)(sanitizedValue);
 }
 
 /**
- * Export `mask` funtion.
+ * Export `mask` function.
  */
 
 function mask(value) {
