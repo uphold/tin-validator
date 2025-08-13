@@ -1,17 +1,17 @@
+'use strict';
 
 /**
  * Module dependencies.
  */
 
 const { isValid, mask, sanitize } = require('../../src');
+const euTinValidator = require('../../src/validators/eu-tin-validator');
+const usTinValidator = require('../../src/validators/us-tin-validator');
 
 /**
  * Constants.
  */
 
-const ein = '66-0000000';
-const itin = '969-88-9999';
-const ssn = '001-23-4567';
 const invalidTins = ['123456789', '1234567890', '0123456789', '9012345678', '987654321', '876543210', '111111111', 'foobar'];
 
 /**
@@ -20,51 +20,92 @@ const invalidTins = ['123456789', '1234567890', '0123456789', '9012345678', '987
 
 describe('tin-validator', () => {
   describe('isValid()', () => {
-    it('should return `false` is `tin` is invalid', () => {
-      invalidTins.forEach(number => expect(isValid(number)).toBe(false));
+    it('should return `false` for invalid TINs', async () => {
+      for (const tin of invalidTins) {
+        const result = await isValid(tin);
+
+        expect(result).toBe(false);
+      }
     });
 
-    it('should return `true` is `tin` is a valid `ein`', () => {
-      expect(isValid(ein)).toBe(true);
+    it('should call `usTinValidator.isValid()` if `country` is `US`', async () => {
+      vi.spyOn(usTinValidator, 'isValid').mockReturnValue(true);
+
+      const result = await isValid('66-0000000', { country: 'US', entityType: 'natural-person' });
+
+      expect(result).toBe(true);
+      expect(usTinValidator.isValid).toHaveBeenCalledTimes(1);
+      expect(usTinValidator.isValid).toHaveBeenCalledWith('66-0000000');
     });
 
-    it('should return `true` is `tin` is a valid `itin`', () => {
-      expect(isValid(itin)).toBe(true);
+    it('should call `euTinValidator.isValid()` if `country` is an EU member', async () => {
+      vi.spyOn(euTinValidator, 'isValid').mockReturnValue(true);
+
+      const result = await isValid('66-0000000', { country: 'FR', entityType: 'natural-person' });
+
+      expect(result).toBe(true);
+      expect(euTinValidator.isValid).toHaveBeenCalledTimes(1);
+      expect(euTinValidator.isValid).toHaveBeenCalledWith('66-0000000', { country: 'FR', entityType: 'natural-person' });
     });
 
-    it('should return `true` is `tin` is a valid `ssn`', () => {
-      expect(isValid(ssn)).toBe(true);
+    it('should return `true` for any other country', async () => {
+      const result = await isValid('16-182749', { country: 'BO', entityType: 'natural-person' });
+
+      expect(result).toBe(true);
     });
   });
 
   describe('mask()', () => {
-    it('should throw an error if `tin` is invalid', () => {
-      try {
-        mask('foobar');
+    it('should call `usTinValidator.mask()` if `country` is `US`', async () => {
+      vi.spyOn(usTinValidator, 'mask').mockReturnValue(true);
 
-        expect.fail();
-      } catch (e) {
-        expect(e).toBeInstanceOf(Error);
-        expect(e.message).toBe('Invalid Taxpayer Identification Number');
-      }
+      await mask('66-0000000', { country: 'US', entityType: 'natural-person' });
+
+      expect(usTinValidator.mask).toHaveBeenCalledTimes(1);
+      expect(usTinValidator.mask).toHaveBeenCalledWith('66-0000000');
     });
 
-    it('should return a masked `ein`', () => {
-      expect(mask(ein)).toBe('XX-XXX0000');
+    it('should call `euTinValidator.mask()` if `country` is an EU member', async () => {
+      vi.spyOn(euTinValidator, 'mask').mockReturnValue(true);
+
+      await mask('66-0000000', { country: 'FR', entityType: 'natural-person' });
+
+      expect(euTinValidator.mask).toHaveBeenCalledTimes(1);
+      expect(euTinValidator.mask).toHaveBeenCalledWith('66-0000000', { country: 'FR', entityType: 'natural-person' });
     });
 
-    it('should return a masked `itin`', () => {
-      expect(mask(itin)).toBe('XXX-XX-9999');
-    });
+    it('should return unmasked TIN for any other country', async () => {
+      const result = await mask('16-182749', { country: 'BO', entityType: 'natural-person' });
 
-    it('should return a masked `ssn`', () => {
-      expect(mask(ssn)).toBe('XXX-XX-4567');
+      expect(result).toBe('16-182749');
     });
   });
 
   describe('sanitize()', () => {
-    it('should remove all no numeric characters', () => {
-      expect(sanitize('az0Z1<2*3#4---5  6%7&8/9?')).toBe('0123456789');
+    it('should call `usTinValidator.sanitize()` if `country` is `US`', async () => {
+      vi.spyOn(usTinValidator, 'sanitize');
+
+      const value = await sanitize('66-0000000');
+
+      expect(usTinValidator.sanitize).toHaveBeenCalledTimes(1);
+      expect(usTinValidator.sanitize).toHaveBeenCalledWith('66-0000000');
+      expect(value).toBe('660000000');
+    });
+
+    it('should call `euTinValidator.sanitize()` if `country` is an EU member', async () => {
+      vi.spyOn(euTinValidator, 'sanitize');
+
+      const value = await sanitize('66-0000/000.', { country: 'FR', entityType: 'natural-person' });
+
+      expect(euTinValidator.sanitize).toHaveBeenCalledTimes(1);
+      expect(euTinValidator.sanitize).toHaveBeenCalledWith('66-0000/000.', { country: 'FR', entityType: 'natural-person' });
+      expect(value).toBe('660000000');
+    });
+
+    it('should return the same value for any other country', async () => {
+      const result = await sanitize('16-182749', { country: 'BO', entityType: 'natural-person' });
+
+      expect(result).toBe('16-182749');
     });
   });
 });

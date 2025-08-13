@@ -33,6 +33,7 @@
   "dependencies": {
     "ein-validator": "^1.0.0",
     "itin-validator": "^1.0.0",
+    "node-fetch": "3.3.2",
     "ssn-validator": "^2.0.1"
   },
   "devDependencies": {
@@ -46,9 +47,6 @@
   },
   "engines": {
     "node": ">=20"
-  },
-  "options": {
-    "mocha": "--compilers js:babel-register --recursive --require should"
   },
   "pre-commit": [
     "lint"
