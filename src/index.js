@@ -6,12 +6,12 @@
  */
 
 /**
- * Module dependencies
+ * Module dependencies.
  */
 
-import { isValid as isValidEin, mask as maskEin } from 'ein-validator';
-import { isValid as isValidItin, mask as maskItin } from 'itin-validator';
-import { isValid as isValidSsn, mask as maskSsn } from 'ssn-validator';
+const { isValid: isValidEin, mask: maskEin } = require('ein-validator');
+const { isValid: isValidItin, mask: maskItin } = require('itin-validator');
+const { isValid: isValidSsn, mask: maskSsn } = require('ssn-validator');
 
 /**
  * Excludes repeated numbers as TIN e.g. 111111111.
@@ -30,7 +30,7 @@ const reverseSequence = sequence.split('').reverse().join('');
  * Export `isValid` function.
  */
 
-export function isValid(value) {
+module.exports.isValid = value => {
   const sanitizedValue = value.replace(/\D/g, '');
 
   if (repeatedNumbers.indexOf(sanitizedValue) !== -1) {
@@ -42,14 +42,14 @@ export function isValid(value) {
   }
 
   return isValidSsn(value) || isValidItin(value) || isValidEin(value);
-}
+};
 
 /**
  * Export `mask` funtion.
  */
 
-export function mask(value) {
-  if (!isValid(value)) {
+module.exports.mask = value => {
+  if (!module.exports.isValid(value)) {
     throw new Error('Invalid Taxpayer Identification Number');
   }
 
@@ -64,12 +64,12 @@ export function mask(value) {
   if (isValidSsn(value)) {
     return maskSsn(value);
   }
-}
+};
 
 /**
  * Sanitize value.
  */
 
-export function sanitize(value) {
+module.exports.sanitize = value => {
   return String(value).replace(/\D+/g, '');
-}
+};
