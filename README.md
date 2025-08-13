@@ -2,9 +2,12 @@
 Validate and mask a U.S. Taxpayer Identification Number (TIN). A TIN may be an Employer Identification Number (EIN), an Individual Taxpayer Identification Number (ITIN) or a Social Security number (SSN).
 
 ## Status
-[![npm version][npm-image]][npm-url] [![build status][travis-image]][travis-url]
+
+[![npm version][npm-image]][npm-url]
+[![build status][ci-image]][ci-url]
 
 ## Installation
+
 Install the package via `npm`:
 
 ```sh
@@ -94,22 +97,14 @@ To test using a local installation of `node.js`:
 npm test
 ```
 
-To test using Docker exclusively:
+## Release process
 
-```sh
-docker-compose run --rm sut
-```
-
-## Release
-
-```sh
-npm version [<newversion> | major | minor | patch] --message "Release %s"
-```
+The release of a version is automated via the [release](https://github.com/uphold/tin-validator/.github/workflows/release.yaml) GitHub workflow. Run it by clicking the "Run workflow" button.
 
 ## License
 MIT
 
 [npm-image]: https://img.shields.io/npm/v/tin-validator.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/tin-validator
-[travis-image]: https://img.shields.io/travis/seegno/tin-validator.svg?style=flat-square
-[travis-url]: https://img.shields.io/travis/seegno/tin-validator.svg?style=flat-square
+[ci-image]: https://github.com/uphold/tin-validator/actions/workflows/ci.yaml/badge.svg?branch=master
+[ci-url]: https://github.com/uphold/tin-validator/actions/workflows/ci.yaml
