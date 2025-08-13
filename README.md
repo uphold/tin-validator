@@ -1,5 +1,9 @@
 # tin-validator
-Validate and mask a U.S. Taxpayer Identification Number (TIN). A TIN may be an Employer Identification Number (EIN), an Individual Taxpayer Identification Number (ITIN) or a Social Security number (SSN).
+Validate and mask Taxpayer Identification Number (TIN) from US and EU countries. A TIN may be an Employer Identification Number (EIN), an Individual Taxpayer Identification Number (ITIN) or a Social Security number (SSN).
+
+Most of the functions default to US country as you can see in the documentation below. Also for US country, `entityType` is not required. When trying to validate EU TIN we need to set both paramenters `country` and `entityType` as TIN format varies from ech country and entity types.
+
+For EU TIN validation, we first try to validate by using an [online API](https://taxation-customs.ec.europa.eu/online-services/online-services-and-databases-taxation/taxpayer-identification-number-tin_en) provided by the European Commisision, if any error is received from this API (for example, if the API is down), then we run our internal validations instead.
 
 ## Status
 
@@ -19,7 +23,10 @@ npm install tin-validator --save
 This method validates if the given value is a valid `Taxpayer Identification Number`.
 
 #### Arguments
-1. `value` _(*)_: The value to validate.
+- `value` _(*)_: The string value to validate.
+- `options` (object, optional):
+  - `country` (string, optional): Country of document to validate (by default, `US`).
+  - `entityType` (string, optional): Possible values: `natural-person` and `legal-entity`. By default: `natural-person`.
 
 #### Returns
 _(boolean)_:  Returns whether the input value is a valid TIN or not.
@@ -38,6 +45,9 @@ isValid('900-70-0000');
 
 isValid('900700000');
 // => true
+
+isValid('123456789', { country: 'PT', entityType: 'natural-person' });
+// => true
 ```
 
 --------------------------------------------------------------------------------
@@ -46,7 +56,10 @@ isValid('900700000');
 This method will help you protect this sensitive piece of information by obfuscating some digits.
 
 #### Arguments
-1. `value` _(*)_: The value to mask.
+- `value` _(*)_: The value to mask.
+- `options` (object, optional):
+  - `country` (string, optional): Country of document to mask (by default, `US`).
+  - `entityType` (string, optional): Regulation entity type (by default, `natural-person`).
 
 #### Returns
 _(string)_: Returns the masked value by replacing value certain digits by 'X'.
@@ -73,7 +86,10 @@ mask('900700000');
 This method will remove all non numeric characters from the value.
 
 #### Arguments
-1. `value` _(*)_: The value to sanitize.
+- `value` _(*)_: The value to sanitize.
+- `options` (object, optional):
+  - `country` (string, optional): Country of document to sanitize (by default, `US`).
+  - `entityType` (string, optional): Regulation entity type (by default, `natural-person`).
 
 #### Returns
 _(string)_: Returns the sanitized value containing only numeric characters.
@@ -100,6 +116,10 @@ npm test
 ## Release process
 
 The release of a version is automated via the [release](https://github.com/uphold/tin-validator/.github/workflows/release.yaml) GitHub workflow. Run it by clicking the "Run workflow" button.
+
+## Upgrading from version 1 to version 2
+
+The methods on version 1 are the same as on version 2. The only change is that the methods were sync, while now they are async.
 
 ## License
 MIT

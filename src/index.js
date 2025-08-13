@@ -1,3 +1,4 @@
+'use strict';
 
 /**
  * See `http://www.irs.gov/Individuals/International-Taxpayers/Taxpayer-Identification-Numbers-TIN` for more information.
@@ -9,67 +10,94 @@
  * Module dependencies.
  */
 
-const { isValid: isValidEin, mask: maskEin } = require('ein-validator');
-const { isValid: isValidItin, mask: maskItin } = require('itin-validator');
-const { isValid: isValidSsn, mask: maskSsn } = require('ssn-validator');
+const euTinValidator = require('./validators/eu-tin-validator');
+const usTinValidator = require('./validators/us-tin-validator');
 
 /**
- * Excludes repeated numbers as TIN e.g. 111111111.
+ * Constants.
  */
 
+const defaultCountry = 'US';
+const defaultEntityType = 'natural-person';
+// Excludes ascending sequence as TIN e.g. 123456789.
+const sequence = Array.from({ length: 10 }, (_, i) => i).join('').repeat(2);
+// Excludes repeated numbers as TIN e.g. 111111111.
 const repeatedNumbers = Array.from({ length: 10 }, (_, i) => i).map(current => String(current).repeat(9));
+// Excludes descending sequence as TIN e.g. 987654321.
+const reverseSequence = sequence.split('').reverse().join('');
 
 /**
- * Excludes ascending and descending sequence as TIN e.g. 123456789.
+ * Run basic TIN validation.
  */
 
-const sequence = Array.from({ length: 10 }, (_, i) => i).reduce((acc, current) => acc + current, '').repeat(2);
-const reverseSequence = sequence.split('').reverse().join('');
+const runBasicValidation = value => {
+  const sanitizedValue = value.replace(/\D/g, '');
+  const isRepeatedSequence = repeatedNumbers.includes(sanitizedValue);
+
+  if (isRepeatedSequence) {
+    return false;
+  }
+
+  const isAscendingSequence = sequence.includes(sanitizedValue);
+  const isDescendingSequence = reverseSequence.includes(sanitizedValue);
+
+  if (isAscendingSequence || isDescendingSequence) {
+    return false;
+  }
+
+  return true;
+};
 
 /**
  * Export `isValid` function.
  */
 
-module.exports.isValid = value => {
-  const sanitizedValue = value.replace(/\D/g, '');
+module.exports.isValid = async (value, { country = defaultCountry, entityType = defaultEntityType } = {}) => {
+  const isValid = runBasicValidation(value);
 
-  if (repeatedNumbers.indexOf(sanitizedValue) !== -1) {
+  if (!isValid) {
     return false;
   }
 
-  if (sequence.includes(sanitizedValue) || reverseSequence.includes(sanitizedValue)) {
-    return false;
+  if (usTinValidator.isCountrySupported(country)) {
+    return usTinValidator.isValid(value);
   }
 
-  return isValidSsn(value) || isValidItin(value) || isValidEin(value);
+  if (euTinValidator.isCountrySupported(country)) {
+    return await euTinValidator.isValid(value, { country, entityType });
+  }
+
+  return true;
 };
 
 /**
  * Export `mask` funtion.
  */
 
-module.exports.mask = value => {
-  if (!module.exports.isValid(value)) {
-    throw new Error('Invalid Taxpayer Identification Number');
+module.exports.mask = async (value, { country = defaultCountry, entityType = defaultEntityType } = {}) => {
+  if (usTinValidator.isCountrySupported(country)) {
+    return usTinValidator.mask(value);
   }
 
-  if (isValidEin(value)) {
-    return maskEin(value);
+  if (euTinValidator.isCountrySupported(country)) {
+    return await euTinValidator.mask(value, { country, entityType });
   }
 
-  if (isValidItin(value)) {
-    return maskItin(value);
-  }
-
-  if (isValidSsn(value)) {
-    return maskSsn(value);
-  }
+  return value;
 };
 
 /**
- * Sanitize value.
+ * Export `sanitize` function.
  */
 
-module.exports.sanitize = value => {
-  return String(value).replace(/\D+/g, '');
+module.exports.sanitize = (value, { country = defaultCountry, entityType = defaultEntityType } = {}) => {
+  if (usTinValidator.isCountrySupported(country)) {
+    return usTinValidator.sanitize(value);
+  }
+
+  if (euTinValidator.isCountrySupported(country)) {
+    return euTinValidator.sanitize(value, { country, entityType });
+  }
+
+  return value;
 };
