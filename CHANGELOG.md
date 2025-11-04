@@ -1,5 +1,11 @@
 # Changelog
 
+## [v2.0.0](https://github.com/uphold/tin-validator/releases/tag/v2.0.0) (2025-11-04)
+
+- Add release script [\#18](https://github.com/uphold/tin-validator/pull/18) ([KevinUphold](https://github.com/KevinUphold))
+- Add EU TIN validation [\#17](https://github.com/uphold/tin-validator/pull/17) ([KevinUphold](https://github.com/KevinUphold))
+- Change core dependencies [\#16](https://github.com/uphold/tin-validator/pull/16) ([KevinUphold](https://github.com/KevinUphold))
+
 ## [1.1.0](https://github.com/uphold/tin-validator/releases/tag/v1.1.0) (2022-11-30)
 - Add github-changelog-generator as dev dependency [\#13](https://github.com/uphold/tin-validator/pull/13) ([diogotorres97](https://github.com/diogotorres97))
 - Improve TIN validator [\#12](https://github.com/uphold/tin-validator/pull/12) ([KevinUphold](https://github.com/KevinUphold))
