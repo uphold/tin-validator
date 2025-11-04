@@ -1,5 +1,9 @@
 # Changelog
 
+## [v2.0.1](https://github.com/uphold/tin-validator/releases/tag/v2.0.1) (2025-11-04)
+
+- Fix node-fetch version [\#19](https://github.com/uphold/tin-validator/pull/19) ([KevinUphold](https://github.com/KevinUphold))
+
 ## [v2.0.0](https://github.com/uphold/tin-validator/releases/tag/v2.0.0) (2025-11-04)
 
 - Add release script [\#18](https://github.com/uphold/tin-validator/pull/18) ([KevinUphold](https://github.com/KevinUphold))
