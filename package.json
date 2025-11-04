@@ -34,7 +34,7 @@
   "dependencies": {
     "ein-validator": "^1.0.0",
     "itin-validator": "^1.0.0",
-    "node-fetch": "3.3.2",
+    "node-fetch": "2.7.0",
     "ssn-validator": "^2.0.1"
   },
   "devDependencies": {
