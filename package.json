@@ -27,6 +27,7 @@
   "scripts": {
     "coverage": "vitest run --coverage",
     "lint": "eslint",
+    "release": "release-it",
     "test": "TZ=UTC NODE_PATH=. NODE_ENV=test vitest run",
     "testdocker": "docker-compose run --rm sut"
   },
