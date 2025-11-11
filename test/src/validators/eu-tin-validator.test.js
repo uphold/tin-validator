@@ -108,27 +108,57 @@ describe('EUTinValidator', () => {
       vi.spyOn(euTinValidator, 'runInternalValidatation').mockReturnValue(false);
       vi.spyOn(euTinValidatorClient, 'post');
 
-      const result = await euTinValidator.isValid('invalid-tin', { country: 'IS', entityType: 'natural-person' });
+      const result = await euTinValidator.isValid('101010', { country: 'IS', entityType: 'natural-person' });
 
       expect(euTinValidator.runInternalValidatation).toHaveBeenCalledTimes(1);
-      expect(euTinValidator.runInternalValidatation).toHaveBeenCalledWith('invalidtin', config);
+      expect(euTinValidator.runInternalValidatation).toHaveBeenCalledWith('101010', config);
       expect(euTinValidatorClient.post).not.toHaveBeenCalled();
       expect(result).toBe(false);
     });
 
-    it('should call `euTinValidatorClient.post()`', async () => {
+    it('should call `euTinValidatorClient.post()` and return `true` if both structure and syntax are valid', async () => {
       vi.spyOn(euTinValidator, 'runInternalValidatation');
-      vi.spyOn(euTinValidatorClient, 'post').mockResolvedValue({ structureValid: true, syntaxValid: true });
+      vi.spyOn(euTinValidatorClient, 'post').mockResolvedValue({ result: { structureValid: true, syntaxUnavailable: false, syntaxValid: true } });
 
-      const result = await euTinValidator.isValid('valid-tin', { country: 'FR', entityType: 'natural-person' });
+      const result = await euTinValidator.isValid('101-010', { country: 'FR', entityType: 'natural-person' });
 
       expect(euTinValidator.runInternalValidatation).not.toHaveBeenCalled();
       expect(euTinValidatorClient.post).toHaveBeenCalledTimes(1);
-      expect(euTinValidatorClient.post).toHaveBeenCalledWith('/check-tin-number', {
+      expect(euTinValidatorClient.post).toHaveBeenCalledWith('/tinRequest', {
         msCode: 'FR',
-        tinNumber: 'validtin'
+        tinNumber: '101010'
       });
       expect(result).toBe(true);
+    });
+
+    it('should call `euTinValidatorClient.post()` and return `true` if structure is valid but syntax is unavailable', async () => {
+      vi.spyOn(euTinValidator, 'runInternalValidatation');
+      vi.spyOn(euTinValidatorClient, 'post').mockResolvedValue({ result: { structureValid: true, syntaxUnavailable: true, syntaxValid: false } });
+
+      const result = await euTinValidator.isValid('101-010', { country: 'FR', entityType: 'natural-person' });
+
+      expect(euTinValidator.runInternalValidatation).not.toHaveBeenCalled();
+      expect(euTinValidatorClient.post).toHaveBeenCalledTimes(1);
+      expect(euTinValidatorClient.post).toHaveBeenCalledWith('/tinRequest', {
+        msCode: 'FR',
+        tinNumber: '101010'
+      });
+      expect(result).toBe(true);
+    });
+
+    it('should call `euTinValidatorClient.post()` and return `false` if structure is invalid', async () => {
+      vi.spyOn(euTinValidator, 'runInternalValidatation');
+      vi.spyOn(euTinValidatorClient, 'post').mockResolvedValue({ result: { structureValid: false, syntaxUnavailable: true, syntaxValid: false } });
+
+      const result = await euTinValidator.isValid('101-010', { country: 'FR', entityType: 'natural-person' });
+
+      expect(euTinValidator.runInternalValidatation).not.toHaveBeenCalled();
+      expect(euTinValidatorClient.post).toHaveBeenCalledTimes(1);
+      expect(euTinValidatorClient.post).toHaveBeenCalledWith('/tinRequest', {
+        msCode: 'FR',
+        tinNumber: '101010'
+      });
+      expect(result).toBe(false);
     });
 
     it('should call `runInternalValidatation()` if `euTinValidatorClient.post()` throws an error', async () => {
@@ -137,15 +167,15 @@ describe('EUTinValidator', () => {
       vi.spyOn(euTinValidator, 'runInternalValidatation').mockReturnValue(true);
       vi.spyOn(euTinValidatorClient, 'post').mockRejectedValue(new Error('Network error'));
 
-      const result = await euTinValidator.isValid('valid-tin', { country: 'FR', entityType: 'natural-person' });
+      const result = await euTinValidator.isValid('101-010', { country: 'FR', entityType: 'natural-person' });
 
       expect(euTinValidatorClient.post).toHaveBeenCalledTimes(1);
-      expect(euTinValidatorClient.post).toHaveBeenCalledWith('/check-tin-number', {
+      expect(euTinValidatorClient.post).toHaveBeenCalledWith('/tinRequest', {
         msCode: 'FR',
-        tinNumber: 'validtin'
+        tinNumber: '101010'
       });
       expect(euTinValidator.runInternalValidatation).toHaveBeenCalledTimes(1);
-      expect(euTinValidator.runInternalValidatation).toHaveBeenCalledWith('validtin', config);
+      expect(euTinValidator.runInternalValidatation).toHaveBeenCalledWith('101010', config);
       expect(result).toBe(true);
     });
   });
@@ -162,6 +192,15 @@ describe('EUTinValidator', () => {
         expect(e).toBeInstanceOf(Error);
         expect(e.message).toBe('Invalid Taxpayer Identification Number');
       }
+    });
+
+    it('should uppercase value', async () => {
+      vi.spyOn(euTinValidator, 'isValid').mockResolvedValue(true);
+
+      const maskedValue = await euTinValidator.mask('1234567ab', { country: 'IE', entityType: 'legal-entity' });
+
+
+      expect(maskedValue).toBe('XXXXX67AB');
     });
 
     describe('legal entity', () => {
@@ -247,15 +286,15 @@ describe('EUTinValidator', () => {
 
   describe('sanitize()', () => {
     it('should call `getMemberStateConfig()` if country and entityType are provided', () => {
-      expect(euTinValidator.sanitize('  1234  /-  ABC ', { country: 'FR', entityType: 'natural-person' })).toBe('1234abc');
+      expect(euTinValidator.sanitize('  1234  /-  abc ', { country: 'FR', entityType: 'natural-person' })).toBe('1234ABC');
     });
 
     it('should remove unnecessary characters and to lower case', () => {
-      expect(euTinValidator.sanitize('  1234  /-  ABC ')).toBe('1234abc');
+      expect(euTinValidator.sanitize('  1234  /-  abc ')).toBe('1234ABC');
     });
 
     it('should use custom sanitization pattern', () => {
-      expect(euTinValidator.sanitize('1234-ABC', { sanitizePattern: /[\d-]/g })).toBe('abc');
+      expect(euTinValidator.sanitize('1234-abc', { sanitizePattern: /[\d-]/g })).toBe('ABC');
     });
   });
 });
