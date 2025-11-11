@@ -115,7 +115,7 @@ npm test
 
 ## Release process
 
-The release of a version is automated via the [release](https://github.com/uphold/tin-validator/.github/workflows/release.yaml) GitHub workflow. Run it by clicking the "Run workflow" button.
+The release of a version is automated via the [release](https://github.com/uphold/tin-validator/actions/workflows/release.yaml) GitHub workflow. Run it by clicking the "Run workflow" button.
 
 ## Upgrading from version 1 to version 2
 
