@@ -62,12 +62,15 @@ class EUTinValidator extends AbstractTinValidator {
     }
 
     try {
-      const { structureValid, syntaxValid } = await euTinValidatorClient.post('/check-tin-number', {
+      const { result: { structureValid, syntaxUnavailable, syntaxValid } = {} } = await euTinValidatorClient.post('/tinRequest', {
         msCode: memberState,
         tinNumber: sanitizedValue
       });
 
-      return !!structureValid && !!syntaxValid;
+      // We consider the EU API response as valid if these conditions are met:
+      // - The structure is valid:
+      // - The syntax is either valid or unavailable.
+      return !!structureValid && (!!syntaxValid || !!syntaxUnavailable);
     } catch (_) {
       return this.runInternalValidatation(sanitizedValue, config);
     }
@@ -78,13 +81,14 @@ class EUTinValidator extends AbstractTinValidator {
    */
 
   async mask(value, options = {}) {
-    const isValid = await this.isValid(value, options);
+    const upperCaseValue = value.toUpperCase();
+    const isValid = await this.isValid(upperCaseValue, options);
 
     if (!isValid) {
       throw new Error('Invalid Taxpayer Identification Number');
     }
 
-    return value.slice(0, value.length - 4).replace(this.defaultMaskPattern, 'X') + value.slice(-4);
+    return upperCaseValue.slice(0, upperCaseValue.length - 4).replace(this.defaultMaskPattern, 'X') + upperCaseValue.slice(-4);
   }
 
   /**
@@ -108,7 +112,7 @@ class EUTinValidator extends AbstractTinValidator {
 
     const pattern = sanitizePattern || this.defaultSanitizePattern;
 
-    return value.toLowerCase().replace(pattern, '');
+    return value.toUpperCase().replace(pattern, '');
   }
 }
 

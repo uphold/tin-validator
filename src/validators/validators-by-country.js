@@ -29,7 +29,7 @@ module.exports = {
       },
       // Cyprus
       CY: {
-        formats: [/^\d{8}[a-z]$/],
+        formats: [/^\d{8}[A-Z]$/],
         validateInternally: true
       },
       // Czechia
@@ -54,7 +54,7 @@ module.exports = {
       },
       // Spain
       ES: {
-        formats: [/^[a-z]\d{8}$/],
+        formats: [/^[A-Z]\d{8}$/],
         validateInternally: true
       },
       // Finland
@@ -105,7 +105,7 @@ module.exports = {
       },
       // Ireland
       IE: {
-        formats: [/^\d{7}[a-z]{1,2}$/, /^chy\d{1,5}$/],
+        formats: [/^\d{7}[A-Z]{1,2}$/, /^CHY\d{1,5}$/],
         validateInternally: true
       },
       // Iceland
@@ -223,7 +223,7 @@ module.exports = {
       },
       // Cyprus
       CY: {
-        formats: [/^\d{8}[a-z]$/]
+        formats: [/^\d{8}[A-Z]$/]
       },
       // Czechia
       CZ: {
@@ -243,11 +243,11 @@ module.exports = {
       },
       // Spain
       ES: {
-        formats: [/^\d{8}[a-z]$/, /^[klmxyz]\d{7}[a-z]$/]
+        formats: [/^\d{8}[A-Z]$/, /^[KLMXYZ]\d{7}[A-Z]$/]
       },
       // Finland
       FI: {
-        formats: [/^\d{6}[abcdefuvwxy+-]\d{3}[a-z0-9]$/],
+        formats: [/^\d{6}[ABCDEFUVWXY+-]\d{3}[A-Z0-9]$/],
         sanitizePattern: /[./\s]/g
       },
       // France
@@ -256,7 +256,7 @@ module.exports = {
       },
       // United Kingdom
       GB: {
-        formats: [/^[a-z]{2}\d{6}[a-d]$/, /^\d{10}$/, /^\d{13}$/],
+        formats: [/^[A-Z]{2}\d{6}[A-D]$/, /^\d{10}$/, /^\d{13}$/],
         validateInternally: true
       },
       // French Guiana
@@ -286,7 +286,7 @@ module.exports = {
       },
       // Ireland
       IE: {
-        formats: [/^\d{7}[a-z]{1,2}$/]
+        formats: [/^\d{7}[A-Z]{1,2}$/]
       },
       // Iceland
       IS: {
@@ -295,12 +295,12 @@ module.exports = {
       },
       // Italy
       IT: {
-        formats: [/^[a-z]{6}\d{2}[a-z]\d{2}[a-z]\d{3}[a-z]$/]
+        formats: [/^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/]
       },
       // Liechtenstein
       LI: {
         formats: [/^\d{4,12}$/],
-        sanitizePattern: /[-/\s.a-z]/g,
+        sanitizePattern: /[-/\s.A-Z]/g,
         validateInternally: true
       },
       // Lithuania
@@ -325,7 +325,7 @@ module.exports = {
       },
       // Malta
       MT: {
-        formats: [/^\d{7}[abghlmpz]$/, /^\d{9}$/]
+        formats: [/^\d{7}[ABGHLMPZ]$/, /^\d{9}$/]
       },
       // Netherlands
       NL: {
