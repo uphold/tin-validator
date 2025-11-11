@@ -1,5 +1,9 @@
 # Changelog
 
+## [v2.1.0](https://github.com/uphold/tin-validator/releases/tag/v2.1.0) (2025-11-11)
+
+- Improve TIN rate acceptance from external API result [\#20](https://github.com/uphold/tin-validator/pull/20) ([vitorcoxta](https://github.com/vitorcoxta))
+
 ## [v2.0.1](https://github.com/uphold/tin-validator/releases/tag/v2.0.1) (2025-11-04)
 
 - Fix node-fetch version [\#19](https://github.com/uphold/tin-validator/pull/19) ([KevinUphold](https://github.com/KevinUphold))
