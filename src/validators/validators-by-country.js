@@ -219,7 +219,8 @@ module.exports = {
       },
       // Bulgaria
       BG: {
-        formats: [/^\d{10}$/]
+        formats: [/^\d{10}$/],
+        validateInternally: true
       },
       // Cyprus
       CY: {
