@@ -1,5 +1,12 @@
 # Changelog
 
+## [v2.2.0](https://github.com/uphold/tin-validator/releases/tag/v2.2.0) (2026-01-12)
+
+- Fix git url [\#26](https://github.com/uphold/tin-validator/pull/26) ([Megamind51](https://github.com/Megamind51))
+- Update `release` workflow to use trusted OIDC publishing [\#25](https://github.com/uphold/tin-validator/pull/25) ([Megamind51](https://github.com/Megamind51))
+- Validate Bulgaria natural persons internally [\#24](https://github.com/uphold/tin-validator/pull/24) ([Megamind51](https://github.com/Megamind51))
+- Fix release URL on readme [\#21](https://github.com/uphold/tin-validator/pull/21) ([Megamind51](https://github.com/Megamind51))
+
 ## [v2.1.0](https://github.com/uphold/tin-validator/releases/tag/v2.1.0) (2025-11-11)
 
 - Improve TIN rate acceptance from external API result [\#20](https://github.com/uphold/tin-validator/pull/20) ([vitorcoxta](https://github.com/vitorcoxta))
