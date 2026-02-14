@@ -1,5 +1,9 @@
 # Changelog
 
+## [v2.3.0](https://github.com/uphold/tin-validator/releases/tag/v2.3.0) (2026-02-14)
+
+- Remove external calls [\#28](https://github.com/uphold/tin-validator/pull/28) ([vitorcoxta](https://github.com/vitorcoxta))
+
 ## [v2.2.0](https://github.com/uphold/tin-validator/releases/tag/v2.2.0) (2026-01-12)
 
 - Fix git url [\#26](https://github.com/uphold/tin-validator/pull/26) ([Megamind51](https://github.com/Megamind51))
