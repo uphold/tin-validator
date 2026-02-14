@@ -207,15 +207,18 @@ module.exports = {
     'natural-person': {
       // Austria
       AT: {
-        formats: [/^\d{9}$/]
+        formats: [/^\d{9}$/],
+        validateInternally: true
       },
       // Åland Islands
       AX: {
-        replaceCountry: 'FI'
+        replaceCountry: 'FI',
+        validateInternally: true
       },
       // Belgium
       BE: {
-        formats: [/^\d{11}$/]
+        formats: [/^\d{11}$/],
+        validateInternally: true
       },
       // Bulgaria
       BG: {
@@ -224,36 +227,44 @@ module.exports = {
       },
       // Cyprus
       CY: {
-        formats: [/^\d{8}[A-Z]$/]
+        formats: [/^\d{8}[A-Z]$/],
+        validateInternally: true
       },
       // Czechia
       CZ: {
-        formats: [/^\d{9}$/, /^\d{10}$/]
+        formats: [/^\d{9}$/, /^\d{10}$/],
+        validateInternally: true
       },
       // Germany
       DE: {
-        formats: [/^\d{11}$/]
+        formats: [/^\d{11}$/],
+        validateInternally: true
       },
       // Denmark
       DK: {
-        formats: [/^\d{10}$/]
+        formats: [/^\d{10}$/],
+        validateInternally: true
       },
       // Estonia
       EE: {
-        formats: [/^\d{11}$/]
+        formats: [/^\d{11}$/],
+        validateInternally: true
       },
       // Spain
       ES: {
-        formats: [/^\d{8}[A-Z]$/, /^[KLMXYZ]\d{7}[A-Z]$/]
+        formats: [/^\d{8}[A-Z]$/, /^[KLMXYZ]\d{7}[A-Z]$/],
+        validateInternally: true
       },
       // Finland
       FI: {
         formats: [/^\d{6}[ABCDEFUVWXY+-]\d{3}[A-Z0-9]$/],
-        sanitizePattern: /[./\s]/g
+        sanitizePattern: /[./\s]/g,
+        validateInternally: true
       },
       // France
       FR: {
-        formats: [/^[0123]\d{12}$/]
+        formats: [/^[0123]\d{12}$/],
+        validateInternally: true
       },
       // United Kingdom
       GB: {
@@ -262,20 +273,24 @@ module.exports = {
       },
       // French Guiana
       GF: {
-        replaceCountry: 'FR'
+        replaceCountry: 'FR',
+        validateInternally: true
       },
       // Gibraltar
       GI: {
-        replaceCountry: 'GB'
+        replaceCountry: 'GB',
+        validateInternally: true
       },
       // Guadeloupe
       GP: {
-        replaceCountry: 'FR'
+        replaceCountry: 'FR',
+        validateInternally: true
       },
       // Greece
       GR: {
         formats: [/^\d{9}$/],
-        renameMemberState: 'EL'
+        renameMemberState: 'EL',
+        validateInternally: true
       },
       // Croatia
       HR: {
@@ -283,11 +298,13 @@ module.exports = {
       },
       // Hungary
       HU: {
-        formats: [/^\d{10}$/]
+        formats: [/^\d{10}$/],
+        validateInternally: true
       },
       // Ireland
       IE: {
-        formats: [/^\d{7}[A-Z]{1,2}$/]
+        formats: [/^\d{7}[A-Z]{1,2}$/],
+        validateInternally: true
       },
       // Iceland
       IS: {
@@ -296,7 +313,8 @@ module.exports = {
       },
       // Italy
       IT: {
-        formats: [/^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/]
+        formats: [/^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/],
+        validateInternally: true
       },
       // Liechtenstein
       LI: {
@@ -306,31 +324,38 @@ module.exports = {
       },
       // Lithuania
       LT: {
-        formats: [/^\d{11}$/]
+        formats: [/^\d{11}$/],
+        validateInternally: true
       },
       // Luxembourg
       LU: {
-        formats: [/^\d{13}$/]
+        formats: [/^\d{13}$/],
+        validateInternally: true
       },
       // Latvia
       LV: {
-        formats: [/^\d{11}$/]
+        formats: [/^\d{11}$/],
+        validateInternally: true
       },
       // Saint Martin
       MF: {
-        replaceCountry: 'FR'
+        replaceCountry: 'FR',
+        validateInternally: true
       },
       // Martinique
       MQ: {
-        replaceCountry: 'FR'
+        replaceCountry: 'FR',
+        validateInternally: true
       },
       // Malta
       MT: {
-        formats: [/^\d{7}[ABGHLMPZ]$/, /^\d{9}$/]
+        formats: [/^\d{7}[ABGHLMPZ]$/, /^\d{9}$/],
+        validateInternally: true
       },
       // Netherlands
       NL: {
-        formats: [/^\d{9}$/]
+        formats: [/^\d{9}$/],
+        validateInternally: true
       },
       // Norway
       NO: {
@@ -339,35 +364,43 @@ module.exports = {
       },
       // Poland
       PL: {
-        formats: [/^\d{10}$/, /^\d{11}$/]
+        formats: [/^\d{10}$/, /^\d{11}$/],
+        validateInternally: true
       },
       // Portugal
       PT: {
-        formats: [/^\d{9}$/]
+        formats: [/^\d{9}$/],
+        validateInternally: true
       },
       // Réunion
       RE: {
-        replaceCountry: 'FR'
+        replaceCountry: 'FR',
+        validateInternally: true
       },
       // Romania
       RO: {
-        formats: [/^\d{13}$/]
+        formats: [/^\d{13}$/],
+        validateInternally: true
       },
       // Sweden
       SE: {
-        formats: [/^\d{10}$/]
+        formats: [/^\d{10}$/],
+        validateInternally: true
       },
       // Slovenia
       SI: {
-        formats: [/^\d{8}$/]
+        formats: [/^\d{8}$/],
+        validateInternally: true
       },
       // Slovakia
       SK: {
-        formats: [/^\d{9}$/, /^\d{10}$/]
+        formats: [/^\d{9}$/, /^\d{10}$/],
+        validateInternally: true
       },
       // Mayotte
       YT: {
-        replaceCountry: 'FR'
+        replaceCountry: 'FR',
+        validateInternally: true
       }
     }
   }
