@@ -355,7 +355,7 @@ module.exports = {
       },
       // Sweden
       SE: {
-        formats: [/^\d{10}$/]
+        formats: [/^\d{10}$/, /^\d{12}$/]
       },
       // Slovenia
       SI: {
