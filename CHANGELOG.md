@@ -1,5 +1,9 @@
 # Changelog
 
+## [v2.4.1](https://github.com/uphold/tin-validator/releases/tag/v2.4.1) (2026-02-16)
+
+- Update `SE` tin validation [\#30](https://github.com/uphold/tin-validator/pull/30) ([Megamind51](https://github.com/Megamind51))
+
 ## [v2.4.0](https://github.com/uphold/tin-validator/releases/tag/v2.4.0) (2026-02-16)
 
 - Add `skipExternalValidations` flag [\#29](https://github.com/uphold/tin-validator/pull/29) ([Megamind51](https://github.com/Megamind51))
