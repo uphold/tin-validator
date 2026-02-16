@@ -683,8 +683,8 @@ module.exports.naturalPersonTins = [
     country: 'SE',
     tin: {
       invalid: ['1234', 'ABCABCABCA', '12345678901'],
-      masked: ['XXXXXX7890'],
-      valid: ['1234567890']
+      masked: ['XXXXXX7890', 'XXXXXXXX9012'],
+      valid: ['1234567890', '123456789012']
     }
   },
   // Slovenia
