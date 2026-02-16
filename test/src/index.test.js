@@ -45,7 +45,17 @@ describe('tin-validator', () => {
 
       expect(result).toBe(true);
       expect(euTinValidator.isValid).toHaveBeenCalledTimes(1);
-      expect(euTinValidator.isValid).toHaveBeenCalledWith('66-0000000', { country: 'FR', entityType: 'natural-person' });
+      expect(euTinValidator.isValid).toHaveBeenCalledWith('66-0000000', expect.objectContaining({ country: 'FR', entityType: 'natural-person' }));
+    });
+
+    it('should pass `skipExternalValidations` flag to `euTinValidator.isValid()`', async () => {
+      vi.spyOn(euTinValidator, 'isValid').mockReturnValue(true);
+
+      const result = await isValid('66-0000000', { country: 'FR', entityType: 'natural-person', skipExternalValidations: true });
+
+      expect(result).toBe(true);
+      expect(euTinValidator.isValid).toHaveBeenCalledTimes(1);
+      expect(euTinValidator.isValid).toHaveBeenCalledWith('66-0000000', { country: 'FR', entityType: 'natural-person', skipExternalValidations: true });
     });
 
     it('should return `true` for any other country', async () => {
@@ -71,7 +81,16 @@ describe('tin-validator', () => {
       await mask('66-0000000', { country: 'FR', entityType: 'natural-person' });
 
       expect(euTinValidator.mask).toHaveBeenCalledTimes(1);
-      expect(euTinValidator.mask).toHaveBeenCalledWith('66-0000000', { country: 'FR', entityType: 'natural-person' });
+      expect(euTinValidator.mask).toHaveBeenCalledWith('66-0000000', expect.objectContaining({ country: 'FR', entityType: 'natural-person' }));
+    });
+
+    it('should pass `skipExternalValidations` flag to `euTinValidator.mask()`', async () => {
+      vi.spyOn(euTinValidator, 'mask').mockReturnValue(true);
+
+      await mask('66-0000000', { country: 'FR', entityType: 'natural-person', skipExternalValidations: true });
+
+      expect(euTinValidator.mask).toHaveBeenCalledTimes(1);
+      expect(euTinValidator.mask).toHaveBeenCalledWith('66-0000000', { country: 'FR', entityType: 'natural-person', skipExternalValidations: true });
     });
 
     it('should return unmasked TIN for any other country', async () => {
