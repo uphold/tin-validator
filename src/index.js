@@ -52,7 +52,7 @@ const runBasicValidation = value => {
  * Export `isValid` function.
  */
 
-module.exports.isValid = async (value, { country = defaultCountry, entityType = defaultEntityType } = {}) => {
+module.exports.isValid = async (value, { country = defaultCountry, entityType = defaultEntityType, skipExternalValidations = false } = {}) => {
   const isValid = runBasicValidation(value);
 
   if (!isValid) {
@@ -64,7 +64,7 @@ module.exports.isValid = async (value, { country = defaultCountry, entityType = 
   }
 
   if (euTinValidator.isCountrySupported(country)) {
-    return await euTinValidator.isValid(value, { country, entityType });
+    return await euTinValidator.isValid(value, { country, entityType, skipExternalValidations });
   }
 
   return true;
@@ -74,13 +74,17 @@ module.exports.isValid = async (value, { country = defaultCountry, entityType = 
  * Export `mask` funtion.
  */
 
-module.exports.mask = async (value, { country = defaultCountry, entityType = defaultEntityType } = {}) => {
+module.exports.mask = async (value, { 
+    country = defaultCountry,
+    entityType = defaultEntityType,
+    skipExternalValidations = false
+  } = {}) => {
   if (usTinValidator.isCountrySupported(country)) {
     return usTinValidator.mask(value);
   }
 
   if (euTinValidator.isCountrySupported(country)) {
-    return await euTinValidator.mask(value, { country, entityType });
+    return await euTinValidator.mask(value, { country, entityType, skipExternalValidations });
   }
 
   return value;

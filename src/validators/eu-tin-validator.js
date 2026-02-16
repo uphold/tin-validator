@@ -53,11 +53,11 @@ class EUTinValidator extends AbstractTinValidator {
    * Is valid.
    */
 
-  async isValid(value, { country, entityType }) {
+  async isValid(value, { country, entityType, skipExternalValidations = false }) {
     const { config, memberState } = this.getMemberStateConfig(country, entityType);
     const sanitizedValue = this.sanitize(value, config);
 
-    if (config.validateInternally) {
+    if (config.validateInternally || skipExternalValidations) {
       return this.runInternalValidatation(sanitizedValue, config);
     }
 

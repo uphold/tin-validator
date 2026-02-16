@@ -116,7 +116,21 @@ describe('EUTinValidator', () => {
       expect(result).toBe(false);
     });
 
-    it.skip('should call `euTinValidatorClient.post()` and return `true` if both structure and syntax are valid', async () => {
+    it('should call `runInternalValidatation()` and skip external API call when `skipExternalValidations` is `true`', async () => {
+      const { config } = euTinValidator.getMemberStateConfig('FR', 'natural-person');
+
+      vi.spyOn(euTinValidator, 'runInternalValidatation').mockReturnValue(true);
+      vi.spyOn(euTinValidatorClient, 'post');
+
+      const result = await euTinValidator.isValid('101-010', { country: 'FR', entityType: 'natural-person', skipExternalValidations: true });
+
+      expect(euTinValidator.runInternalValidatation).toHaveBeenCalledTimes(1);
+      expect(euTinValidator.runInternalValidatation).toHaveBeenCalledWith('101010', config);
+      expect(euTinValidatorClient.post).not.toHaveBeenCalled();
+      expect(result).toBe(true);
+    });
+
+    it('should call `euTinValidatorClient.post()` and return `true` if both structure and syntax are valid', async () => {
       vi.spyOn(euTinValidator, 'runInternalValidatation');
       vi.spyOn(euTinValidatorClient, 'post').mockResolvedValue({ result: { structureValid: true, syntaxUnavailable: false, syntaxValid: true } });
 
@@ -131,7 +145,7 @@ describe('EUTinValidator', () => {
       expect(result).toBe(true);
     });
 
-    it.skip('should call `euTinValidatorClient.post()` and return `true` if structure is valid but syntax is unavailable', async () => {
+    it('should call `euTinValidatorClient.post()` and return `true` if structure is valid but syntax is unavailable', async () => {
       vi.spyOn(euTinValidator, 'runInternalValidatation');
       vi.spyOn(euTinValidatorClient, 'post').mockResolvedValue({ result: { structureValid: true, syntaxUnavailable: true, syntaxValid: false } });
 
@@ -146,7 +160,7 @@ describe('EUTinValidator', () => {
       expect(result).toBe(true);
     });
 
-    it.skip('should call `euTinValidatorClient.post()` and return `false` if structure is invalid', async () => {
+    it('should call `euTinValidatorClient.post()` and return `false` if structure is invalid', async () => {
       vi.spyOn(euTinValidator, 'runInternalValidatation');
       vi.spyOn(euTinValidatorClient, 'post').mockResolvedValue({ result: { structureValid: false, syntaxUnavailable: true, syntaxValid: false } });
 
@@ -161,7 +175,7 @@ describe('EUTinValidator', () => {
       expect(result).toBe(false);
     });
 
-    it.skip('should call `runInternalValidatation()` if `euTinValidatorClient.post()` throws an error', async () => {
+    it('should call `runInternalValidatation()` if `euTinValidatorClient.post()` throws an error', async () => {
       const { config } = euTinValidator.getMemberStateConfig('FR', 'natural-person');
 
       vi.spyOn(euTinValidator, 'runInternalValidatation').mockReturnValue(true);
@@ -181,6 +195,15 @@ describe('EUTinValidator', () => {
   });
 
   describe('mask()', () => {
+    it('should pass `skipExternalValidations` flag to `isValid()`', async () => {
+      vi.spyOn(euTinValidator, 'isValid').mockResolvedValue(true);
+
+      await euTinValidator.mask('1234567ab', { country: 'FR', entityType: 'natural-person', skipExternalValidations: true });
+
+      expect(euTinValidator.isValid).toHaveBeenCalledTimes(1);
+      expect(euTinValidator.isValid).toHaveBeenCalledWith('1234567AB', { country: 'FR', entityType: 'natural-person', skipExternalValidations: true });
+    });
+
     it('should throw an error if `tin` is invalid', async () => {
       vi.spyOn(euTinValidator, 'isValid').mockRejectedValue(new Error('Invalid Taxpayer Identification Number'));
 
