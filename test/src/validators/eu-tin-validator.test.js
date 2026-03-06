@@ -195,7 +195,15 @@ describe('EUTinValidator', () => {
   });
 
   describe('mask()', () => {
-    it('should pass `skipExternalValidations` flag to `isValid()`', async () => {
+    it('should not call `isValid()` if `options.skipValidations` is `true`', async () => {
+      vi.spyOn(euTinValidator, 'isValid');
+
+      await euTinValidator.mask('1234567ab', { country: 'FR', entityType: 'natural-person', skipValidations: true });
+
+      expect(euTinValidator.isValid).not.toHaveBeenCalled();
+    });
+
+    it('should call `isValid()` if `options.skipExternalValidations` is `true`', async () => {
       vi.spyOn(euTinValidator, 'isValid').mockResolvedValue(true);
 
       await euTinValidator.mask('1234567ab', { country: 'FR', entityType: 'natural-person', skipExternalValidations: true });
@@ -218,9 +226,7 @@ describe('EUTinValidator', () => {
     });
 
     it('should uppercase value', async () => {
-      vi.spyOn(euTinValidator, 'isValid').mockResolvedValue(true);
-
-      const maskedValue = await euTinValidator.mask('1234567ab', { country: 'IE', entityType: 'legal-entity' });
+      const maskedValue = await euTinValidator.mask('1234567ab', { country: 'IE', entityType: 'legal-entity', skipValidations: true });
 
 
       expect(maskedValue).toBe('XXXXX67AB');
@@ -230,10 +236,8 @@ describe('EUTinValidator', () => {
       const entityType = 'legal-entity';
 
       test.each(legalEntityTins)('should return masked value for $country TIN', async ({ country, tin }) => {
-        vi.spyOn(euTinValidator, 'isValid').mockResolvedValue(true);
-
         for (const index in tin.valid) {
-          const maskedTin = await euTinValidator.mask(tin.valid[index], { country, entityType });
+          const maskedTin = await euTinValidator.mask(tin.valid[index], { country, entityType, skipValidations: true });
 
           expect(maskedTin).toBe(tin.masked[index]);
         }
@@ -243,13 +247,9 @@ describe('EUTinValidator', () => {
     describe('natural person', () => {
       const entityType = 'natural-person';
 
-      beforeEach(() => {
-        vi.spyOn(euTinValidatorClient, 'post').mockRejectedValue(new Error('Network error'));
-      });
-
       test.each(naturalPersonTins)('should return masked value for $country TIN', async ({ country, tin }) => {
         for (const index in tin.valid) {
-          const maskedTin = await euTinValidator.mask(tin.valid[index], { country, entityType });
+          const maskedTin = await euTinValidator.mask(tin.valid[index], { country, entityType, skipValidations: true });
 
           expect(maskedTin).toBe(tin.masked[index]);
         }
