@@ -34,11 +34,13 @@ class USTinValidator extends AbstractTinValidator {
    * Mask.
    */
 
-  mask(value) {
-    const isValid = this.isValid(value);
+  mask(value, options = {}) {
+    if (!options.skipValidations) {
+      const isValid = this.isValid(value);
 
-    if (!isValid) {
-      throw new Error('Invalid Taxpayer Identification Number');
+      if (!isValid) {
+        throw new Error('Invalid Taxpayer Identification Number');
+      }
     }
 
     if (isValidEin(value)) {

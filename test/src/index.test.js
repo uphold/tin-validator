@@ -66,37 +66,73 @@ describe('tin-validator', () => {
   });
 
   describe('mask()', () => {
-    it('should call `usTinValidator.mask()` if `country` is `US`', async () => {
-      vi.spyOn(usTinValidator, 'mask').mockReturnValue(true);
-
-      await mask('66-0000000', { country: 'US', entityType: 'natural-person' });
-
-      expect(usTinValidator.mask).toHaveBeenCalledTimes(1);
-      expect(usTinValidator.mask).toHaveBeenCalledWith('66-0000000');
-    });
-
-    it('should call `euTinValidator.mask()` if `country` is an EU member', async () => {
-      vi.spyOn(euTinValidator, 'mask').mockReturnValue(true);
-
-      await mask('66-0000000', { country: 'FR', entityType: 'natural-person' });
-
-      expect(euTinValidator.mask).toHaveBeenCalledTimes(1);
-      expect(euTinValidator.mask).toHaveBeenCalledWith('66-0000000', expect.objectContaining({ country: 'FR', entityType: 'natural-person' }));
-    });
-
-    it('should pass `skipExternalValidations` flag to `euTinValidator.mask()`', async () => {
-      vi.spyOn(euTinValidator, 'mask').mockReturnValue(true);
-
-      await mask('66-0000000', { country: 'FR', entityType: 'natural-person', skipExternalValidations: true });
-
-      expect(euTinValidator.mask).toHaveBeenCalledTimes(1);
-      expect(euTinValidator.mask).toHaveBeenCalledWith('66-0000000', { country: 'FR', entityType: 'natural-person', skipExternalValidations: true });
-    });
-
-    it('should return unmasked TIN for any other country', async () => {
+    it('should return unmasked TIN if `country` is not `US` or an EU member', async () => {
       const result = await mask('16-182749', { country: 'BO', entityType: 'natural-person' });
 
       expect(result).toBe('16-182749');
+    });
+
+    describe('US TIN', () => {
+      const country = 'US';
+
+      it('should call `usTinValidator.mask()`', async () => {
+        vi.spyOn(usTinValidator, 'mask').mockReturnValue(true);
+
+        await mask('66-0000000', { country });
+
+        expect(usTinValidator.mask).toHaveBeenCalledTimes(1);
+        expect(usTinValidator.mask).toHaveBeenCalledWith('66-0000000', { skipValidations: false });
+      });
+
+      it('should call `usTinValidator.mask()` with `options.skipValidations` if provided', async () => {
+        vi.spyOn(usTinValidator, 'mask').mockReturnValue(true);
+
+        await mask('66-0000000', { country, skipValidations: true });
+
+        expect(usTinValidator.mask).toHaveBeenCalledTimes(1);
+        expect(usTinValidator.mask).toHaveBeenCalledWith('66-0000000', { skipValidations: true });
+      });
+    });
+
+    describe('EU TIN', () => {
+      const country = 'FR';
+
+      it('should call `euTinValidator.mask()` if `country` is an EU member', async () => {
+        vi.spyOn(euTinValidator, 'mask').mockReturnValue(true);
+
+        await mask('66-0000000', { country, entityType: 'natural-person' });
+
+        expect(euTinValidator.mask).toHaveBeenCalledTimes(1);
+        expect(euTinValidator.mask).toHaveBeenCalledWith('66-0000000', expect.objectContaining({ country: 'FR', entityType: 'natural-person' }));
+      });
+
+      it('should call `euTinValidator.mask()` with `options.skipExternalValidations` if provided', async () => {
+        vi.spyOn(euTinValidator, 'mask').mockReturnValue(true);
+
+        await mask('66-0000000', { country, entityType: 'natural-person', skipExternalValidations: true });
+
+        expect(euTinValidator.mask).toHaveBeenCalledTimes(1);
+        expect(euTinValidator.mask).toHaveBeenCalledWith('66-0000000', {
+          country,
+          entityType: 'natural-person',
+          skipExternalValidations: true,
+          skipValidations: false,
+        });
+      });
+
+      it('should call `euTinValidator.mask()` with `options.skipValidations` if provided', async () => {
+        vi.spyOn(euTinValidator, 'mask').mockReturnValue(true);
+
+        await mask('66-0000000', { country, entityType: 'natural-person', skipValidations: true });
+
+        expect(euTinValidator.mask).toHaveBeenCalledTimes(1);
+        expect(euTinValidator.mask).toHaveBeenCalledWith('66-0000000', {
+          country,
+          entityType: 'natural-person',
+          skipExternalValidations: false,
+          skipValidations: true
+        });
+      });
     });
   });
 

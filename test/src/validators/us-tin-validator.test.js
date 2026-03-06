@@ -48,6 +48,14 @@ describe('USTinValidator', () => {
   });
 
   describe('mask()', () => {
+    it('should not call `isValid()` if `options.skipValidations` is `true`', () => {
+      vi.spyOn(usTinValidator, 'isValid');
+
+      usTinValidator.mask(ein, { skipValidations: true });
+
+      expect(usTinValidator.isValid).not.toHaveBeenCalled();
+    });
+
     it('should throw an error if `tin` is invalid', () => {
       try {
         usTinValidator.mask('foobar');

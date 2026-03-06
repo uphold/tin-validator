@@ -82,10 +82,13 @@ class EUTinValidator extends AbstractTinValidator {
 
   async mask(value, options = {}) {
     const upperCaseValue = value.toUpperCase();
-    const isValid = await this.isValid(upperCaseValue, options);
 
-    if (!isValid) {
-      throw new Error('Invalid Taxpayer Identification Number');
+    if (!options.skipValidations) {
+      const isValid = await this.isValid(upperCaseValue, options);
+
+      if (!isValid) {
+        throw new Error('Invalid Taxpayer Identification Number');
+      }
     }
 
     return upperCaseValue.slice(0, upperCaseValue.length - 4).replace(this.defaultMaskPattern, 'X') + upperCaseValue.slice(-4);

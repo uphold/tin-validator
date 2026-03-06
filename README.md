@@ -27,7 +27,7 @@ This method validates if the given value is a valid `Taxpayer Identification Num
 - `options` (object, optional):
   - `country` (string, optional): Country of document to validate (by default, `US`).
   - `entityType` (string, optional): Possible values: `natural-person` and `legal-entity`. By default: `natural-person`.
-  - `skipExternalValidations` (boolean, optional): When set to `true`, skips external API validation and uses only internal validation. This is useful for performance, offline scenarios, or testing. By default: `false`.
+  - `skipExternalValidations` (boolean, optional): Only applicable for EU TIN. When set to `true`, it skips external API validation and uses only internal validation. This is useful for performance, offline scenarios, or testing. By default: `false`.
 
 #### Returns
 _(boolean)_:  Returns whether the input value is a valid TIN or not.
@@ -61,7 +61,8 @@ This method will help you protect this sensitive piece of information by obfusca
 - `options` (object, optional):
   - `country` (string, optional): Country of document to mask (by default, `US`).
   - `entityType` (string, optional): Regulation entity type (by default, `natural-person`).
-  - `skipExternalValidations` (boolean, optional): When set to `true`, skips external API validation and uses only internal validation. This is useful for performance, offline scenarios, or testing. By default: `false`.
+  - `skipExternalValidations` (boolean, optional): Only applicable for EU TIN. When set to `true`, it skips external API validation and uses only internal validation. This is useful for performance, offline scenarios, or testing. By default: `false`.
+  - `skipValidations` (boolean, optional): Applicable for US and EU TIN. When set to `true`, it skips all kind of validations. This is useful when calling `mask()` after calling `isValid()`. By default: `false`.
 
 #### Returns
 _(string)_: Returns the masked value by replacing value certain digits by 'X'.
