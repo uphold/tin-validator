@@ -49,7 +49,7 @@ const runBasicValidation = value => {
 };
 
 /**
- * Export `isValid` function.
+ * Export `isValid`.
  */
 
 module.exports.isValid = async (value, { country = defaultCountry, entityType = defaultEntityType, skipExternalValidations = false } = {}) => {
@@ -71,7 +71,7 @@ module.exports.isValid = async (value, { country = defaultCountry, entityType = 
 };
 
 /**
- * Export `mask` funtion.
+ * Export `mask`.
  */
 
 module.exports.mask = async (value, {
@@ -92,7 +92,7 @@ module.exports.mask = async (value, {
 };
 
 /**
- * Export `sanitize` function.
+ * Export `sanitize`.
  */
 
 module.exports.sanitize = (value, { country = defaultCountry, entityType = defaultEntityType } = {}) => {
@@ -102,6 +102,18 @@ module.exports.sanitize = (value, { country = defaultCountry, entityType = defau
 
   if (euTinValidator.isCountrySupported(country)) {
     return euTinValidator.sanitize(value, { country, entityType });
+  }
+
+  return value;
+};
+
+/**
+ * Export `standardize`.
+ */
+
+module.exports.standardize = (value, { country = defaultCountry, entityType = defaultEntityType } = {}) => {
+  if (euTinValidator.isCountrySupported(country)) {
+    return euTinValidator.standardize(value, { country, entityType });
   }
 
   return value;

@@ -326,7 +326,17 @@ module.exports = {
       },
       // Malta
       MT: {
-        formats: [/^\d{7}[ABGHLMPZ]$/, /^\d{9}$/]
+        formats: [/^\d{7}[ABGHLMPZ]$/, /^\d{9}$/],
+        standardize: value => {
+          if (/^\d{3,7}[ABGHLMPZ]$/i.test(value)) {
+            const digits = value.slice(0, -1);
+            const letter = value.slice(-1);
+
+            return digits.padStart(7, '0') + letter;
+          }
+
+          return value;
+        }
       },
       // Netherlands
       NL: {

@@ -109,6 +109,30 @@ sanitize('900a7#$0foobar0000');
 
 --------------------------------------------------------------------------------
 
+### `standardize(value)`
+This method will standardize TIN values. Validators may accept TIN values for specific countries with formatting variations (e.g. omitting prefixes of zeros). Users should invoke this method prior value masking and DB persistence, as it returns the official version of the TIN.
+
+#### Arguments
+- `value` _(*)_: The value to standardize.
+- `options` (object, optional):
+  - `country` (string, optional): Country of document to standardize (by default, `US`).
+  - `entityType` (string, optional): Regulation entity type (by default, `natural-person`).
+
+#### Returns
+_(string)_: Returns the standardized value.
+
+#### Example
+
+```js
+standardize('123A', { country: 'MT' });
+// => 0000123A
+
+standardize('123456789');
+// => 123456789
+```
+
+--------------------------------------------------------------------------------
+
 ## Tests
 To test using a local installation of `node.js`:
 

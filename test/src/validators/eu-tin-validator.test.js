@@ -213,7 +213,7 @@ describe('EUTinValidator', () => {
     });
 
     it('should throw an error if `tin` is invalid', async () => {
-      vi.spyOn(euTinValidator, 'isValid').mockRejectedValue(new Error('Invalid Taxpayer Identification Number'));
+      vi.spyOn(euTinValidator, 'isValid').mockResolvedValue(false);
 
       try {
         await euTinValidator.mask('foobar', { country: 'FR', entityType: 'natural-person' });
@@ -312,12 +312,37 @@ describe('EUTinValidator', () => {
       expect(euTinValidator.sanitize('  1234  /-  abc ', { country: 'FR', entityType: 'natural-person' })).toBe('1234ABC');
     });
 
-    it('should remove unnecessary characters and to lower case', () => {
+    it('should remove unnecessary characters and to upper case', () => {
       expect(euTinValidator.sanitize('  1234  /-  abc ')).toBe('1234ABC');
     });
 
     it('should use custom sanitization pattern', () => {
       expect(euTinValidator.sanitize('1234-abc', { sanitizePattern: /[\d-]/g })).toBe('ABC');
+    });
+  });
+
+  describe('standardize()', () => {
+    it('should standardize value if country requires it', () => {
+      [
+        {
+          standardizedValue: '0000123A',
+          value: ' 1 2 3 a '
+        },
+        {
+          standardizedValue: '123456789',
+          value: ' 1 2 3 4 5 6 7 8 9 '
+        }
+      ].forEach(({ standardizedValue, value }) => {
+        expect(euTinValidator.standardize(value, { country: 'MT', entityType: 'natural-person' })).toBe(standardizedValue);
+      });
+    });
+
+    it('should not standardize value if country requires it but value is already standardized', () => {
+      expect(euTinValidator.standardize('0000123A', { country: 'MT', entityType: 'natural-person' })).toBe('0000123A');
+    });
+
+    it('should not standardize value if country does not require it', () => {
+      expect(euTinValidator.standardize('12345678901', { country: 'BE', entityType: 'natural-person' })).toBe('12345678901');
     });
   });
 });
