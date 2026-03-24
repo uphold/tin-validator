@@ -33,7 +33,7 @@ class EUTinValidator extends AbstractTinValidator {
 
     if (memberStateConfig.replaceCountry) {
       return {
-        config: configByMemberState[entityType][memberStateConfig.replaceCountry] || {},
+        config: configByMemberState[entityType][memberStateConfig.replaceCountry],
         memberState: memberStateConfig.renameMemberState || memberStateConfig.replaceCountry
       };
     }
@@ -116,6 +116,18 @@ class EUTinValidator extends AbstractTinValidator {
     const pattern = sanitizePattern || this.defaultSanitizePattern;
 
     return value.toUpperCase().replace(pattern, '');
+  }
+
+  /**
+   * Standardize.
+   */
+
+  standardize(value, { country, entityType } = {}) {
+    const { config } = this.getMemberStateConfig(country, entityType);
+
+    value = this.sanitize(value, { country, entityType });
+
+    return config?.standardize?.(value) || value;
   }
 }
 

@@ -4,8 +4,8 @@
  * Module dependencies.
  */
 
-const { isValid, mask, sanitize } = require('../../src');
 const euTinValidator = require('../../src/validators/eu-tin-validator');
+const tinValidator = require('../../src');
 const usTinValidator = require('../../src/validators/us-tin-validator');
 
 /**
@@ -22,7 +22,7 @@ describe('tin-validator', () => {
   describe('isValid()', () => {
     it('should return `false` for invalid TINs', async () => {
       for (const tin of invalidTins) {
-        const result = await isValid(tin);
+        const result = await tinValidator.isValid(tin);
 
         expect(result).toBe(false);
       }
@@ -31,7 +31,7 @@ describe('tin-validator', () => {
     it('should call `usTinValidator.isValid()` if `country` is `US`', async () => {
       vi.spyOn(usTinValidator, 'isValid').mockReturnValue(true);
 
-      const result = await isValid('66-0000000', { country: 'US', entityType: 'natural-person' });
+      const result = await tinValidator.isValid('66-0000000', { country: 'US', entityType: 'natural-person' });
 
       expect(result).toBe(true);
       expect(usTinValidator.isValid).toHaveBeenCalledTimes(1);
@@ -41,7 +41,7 @@ describe('tin-validator', () => {
     it('should call `euTinValidator.isValid()` if `country` is an EU member', async () => {
       vi.spyOn(euTinValidator, 'isValid').mockReturnValue(true);
 
-      const result = await isValid('66-0000000', { country: 'FR', entityType: 'natural-person' });
+      const result = await tinValidator.isValid('66-0000000', { country: 'FR', entityType: 'natural-person' });
 
       expect(result).toBe(true);
       expect(euTinValidator.isValid).toHaveBeenCalledTimes(1);
@@ -51,7 +51,7 @@ describe('tin-validator', () => {
     it('should pass `skipExternalValidations` flag to `euTinValidator.isValid()`', async () => {
       vi.spyOn(euTinValidator, 'isValid').mockReturnValue(true);
 
-      const result = await isValid('66-0000000', { country: 'FR', entityType: 'natural-person', skipExternalValidations: true });
+      const result = await tinValidator.isValid('66-0000000', { country: 'FR', entityType: 'natural-person', skipExternalValidations: true });
 
       expect(result).toBe(true);
       expect(euTinValidator.isValid).toHaveBeenCalledTimes(1);
@@ -59,7 +59,7 @@ describe('tin-validator', () => {
     });
 
     it('should return `true` for any other country', async () => {
-      const result = await isValid('16-182749', { country: 'BO', entityType: 'natural-person' });
+      const result = await tinValidator.isValid('16-182749', { country: 'BO', entityType: 'natural-person' });
 
       expect(result).toBe(true);
     });
@@ -67,7 +67,7 @@ describe('tin-validator', () => {
 
   describe('mask()', () => {
     it('should return unmasked TIN if `country` is not `US` or an EU member', async () => {
-      const result = await mask('16-182749', { country: 'BO', entityType: 'natural-person' });
+      const result = await tinValidator.mask('16-182749', { country: 'BO', entityType: 'natural-person' });
 
       expect(result).toBe('16-182749');
     });
@@ -78,7 +78,7 @@ describe('tin-validator', () => {
       it('should call `usTinValidator.mask()`', async () => {
         vi.spyOn(usTinValidator, 'mask').mockReturnValue(true);
 
-        await mask('66-0000000', { country });
+        await tinValidator.mask('66-0000000', { country });
 
         expect(usTinValidator.mask).toHaveBeenCalledTimes(1);
         expect(usTinValidator.mask).toHaveBeenCalledWith('66-0000000', { skipValidations: false });
@@ -87,7 +87,7 @@ describe('tin-validator', () => {
       it('should call `usTinValidator.mask()` with `options.skipValidations` if provided', async () => {
         vi.spyOn(usTinValidator, 'mask').mockReturnValue(true);
 
-        await mask('66-0000000', { country, skipValidations: true });
+        await tinValidator.mask('66-0000000', { country, skipValidations: true });
 
         expect(usTinValidator.mask).toHaveBeenCalledTimes(1);
         expect(usTinValidator.mask).toHaveBeenCalledWith('66-0000000', { skipValidations: true });
@@ -100,7 +100,7 @@ describe('tin-validator', () => {
       it('should call `euTinValidator.mask()` if `country` is an EU member', async () => {
         vi.spyOn(euTinValidator, 'mask').mockReturnValue(true);
 
-        await mask('66-0000000', { country, entityType: 'natural-person' });
+        await tinValidator.mask('66-0000000', { country, entityType: 'natural-person' });
 
         expect(euTinValidator.mask).toHaveBeenCalledTimes(1);
         expect(euTinValidator.mask).toHaveBeenCalledWith('66-0000000', expect.objectContaining({ country: 'FR', entityType: 'natural-person' }));
@@ -109,7 +109,7 @@ describe('tin-validator', () => {
       it('should call `euTinValidator.mask()` with `options.skipExternalValidations` if provided', async () => {
         vi.spyOn(euTinValidator, 'mask').mockReturnValue(true);
 
-        await mask('66-0000000', { country, entityType: 'natural-person', skipExternalValidations: true });
+        await tinValidator.mask('66-0000000', { country, entityType: 'natural-person', skipExternalValidations: true });
 
         expect(euTinValidator.mask).toHaveBeenCalledTimes(1);
         expect(euTinValidator.mask).toHaveBeenCalledWith('66-0000000', {
@@ -123,7 +123,7 @@ describe('tin-validator', () => {
       it('should call `euTinValidator.mask()` with `options.skipValidations` if provided', async () => {
         vi.spyOn(euTinValidator, 'mask').mockReturnValue(true);
 
-        await mask('66-0000000', { country, entityType: 'natural-person', skipValidations: true });
+        await tinValidator.mask('66-0000000', { country, entityType: 'natural-person', skipValidations: true });
 
         expect(euTinValidator.mask).toHaveBeenCalledTimes(1);
         expect(euTinValidator.mask).toHaveBeenCalledWith('66-0000000', {
@@ -140,7 +140,7 @@ describe('tin-validator', () => {
     it('should call `usTinValidator.sanitize()` if `country` is `US`', async () => {
       vi.spyOn(usTinValidator, 'sanitize');
 
-      const value = await sanitize('66-0000000');
+      const value = await tinValidator.sanitize('66-0000000');
 
       expect(usTinValidator.sanitize).toHaveBeenCalledTimes(1);
       expect(usTinValidator.sanitize).toHaveBeenCalledWith('66-0000000');
@@ -150,7 +150,7 @@ describe('tin-validator', () => {
     it('should call `euTinValidator.sanitize()` if `country` is an EU member', async () => {
       vi.spyOn(euTinValidator, 'sanitize');
 
-      const value = await sanitize('66-0000/000.', { country: 'FR', entityType: 'natural-person' });
+      const value = await tinValidator.sanitize('66-0000/000.', { country: 'FR', entityType: 'natural-person' });
 
       expect(euTinValidator.sanitize).toHaveBeenCalledTimes(1);
       expect(euTinValidator.sanitize).toHaveBeenCalledWith('66-0000/000.', { country: 'FR', entityType: 'natural-person' });
@@ -158,9 +158,36 @@ describe('tin-validator', () => {
     });
 
     it('should return the same value for any other country', async () => {
-      const result = await sanitize('16-182749', { country: 'BO', entityType: 'natural-person' });
+      const result = await tinValidator.sanitize('16-182749', { country: 'BO', entityType: 'natural-person' });
 
       expect(result).toBe('16-182749');
+    });
+  });
+
+  describe('standardize()', () => {
+    it('should call `euTinValidator.standardize()` if `country` is an EU member', async () => {
+      const value = '12345678901';
+      const country = 'BE';
+
+      vi.spyOn(euTinValidator, 'standardize').mockReturnValue(value);
+
+      const normalizedValue = await tinValidator.standardize(value, { country, entityType: 'natural-person' });
+
+      expect(normalizedValue).toBe(value);
+      expect(euTinValidator.standardize).toHaveBeenCalledTimes(1);
+      expect(euTinValidator.standardize).toHaveBeenCalledWith(value, { country, entityType: 'natural-person' });
+    });
+
+    it('should return same value if `country` is not an EU member', async () => {
+      const value = 'foobar';
+      const country = 'foo';
+
+      vi.spyOn(euTinValidator, 'standardize');
+
+      const normalizedValue = await tinValidator.standardize(value, { country, entityType: 'natural-person' });
+
+      expect(normalizedValue).toBe(value);
+      expect(euTinValidator.standardize).not.toHaveBeenCalled();
     });
   });
 });
