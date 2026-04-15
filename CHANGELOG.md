@@ -1,5 +1,9 @@
 # Changelog
 
+## [v2.6.0](https://github.com/uphold/tin-validator/releases/tag/v2.6.0) (2026-04-15)
+
+- Add `standardize` method [\#32](https://github.com/uphold/tin-validator/pull/32) ([KevinUphold](https://github.com/KevinUphold))
+
 ## [v2.5.0](https://github.com/uphold/tin-validator/releases/tag/v2.5.0) (2026-03-10)
 
 - Skip validations on mask [\#31](https://github.com/uphold/tin-validator/pull/31) ([KevinUphold](https://github.com/KevinUphold))
