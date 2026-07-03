@@ -1,6 +1,19 @@
 'use strict';
 
 /**
+ * Validate Netherlands BSN (Burgerservicenummer) using the 11-proof algorithm.
+ * An 8-digit input is padded with a leading zero before validation.
+ */
+
+function validateBSN(value) {
+  const digits = value.length === 8 ? `0${value}` : value;
+  const weights = [9, 8, 7, 6, 5, 4, 3, 2, -1];
+  const sum = digits.split('').reduce((acc, digit, index) => acc + Number(digit) * weights[index], 0);
+
+  return sum % 11 === 0;
+}
+
+/**
  * Export validations.
  */
 
@@ -340,7 +353,8 @@ module.exports = {
       },
       // Netherlands
       NL: {
-        formats: [/^\d{9}$/]
+        formats: [/^\d{8}$/, /^\d{9}$/],
+        validator: validateBSN
       },
       // Norway
       NO: {
