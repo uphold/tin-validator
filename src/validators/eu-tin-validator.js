@@ -58,7 +58,7 @@ class EUTinValidator extends AbstractTinValidator {
     const sanitizedValue = this.sanitize(value, config);
 
     if (config.validateInternally || skipExternalValidations) {
-      return this.runInternalValidatation(sanitizedValue, config);
+      return this.runInternalValidation(sanitizedValue, config);
     }
 
     try {
@@ -72,7 +72,7 @@ class EUTinValidator extends AbstractTinValidator {
       // - The syntax is either valid or unavailable.
       return !!structureValid && (!!syntaxValid || !!syntaxUnavailable);
     } catch (_) {
-      return this.runInternalValidatation(sanitizedValue, config);
+      return this.runInternalValidation(sanitizedValue, config);
     }
   }
 
@@ -98,8 +98,18 @@ class EUTinValidator extends AbstractTinValidator {
    * Validate internal.
    */
 
-  runInternalValidatation(value, config) {
-    return config.formats.some(format => format.test(value));
+  runInternalValidation(value, config) {
+    const matchesFormat = config.formats.some(format => format.test(value));
+
+    if (!matchesFormat) {
+      return false;
+    }
+
+    if (config.validator) {
+      return config.validator(value);
+    }
+
+    return true;
   }
 
   /**

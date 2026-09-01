@@ -628,9 +628,9 @@ module.exports.naturalPersonTins = [
   {
     country: 'NL',
     tin: {
-      invalid: ['1234', 'ABCABCABC', '1234567890'],
-      masked: ['XXXXX6789'],
-      valid: ['123456789']
+      invalid: ['1234', 'ABCABCABC', '1234567890', '123456789'],
+      masked: ['XXXXX6782', 'XXXX5672'],
+      valid: ['123456782', '12345672']
     }
   },
   // Norway
