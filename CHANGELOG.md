@@ -1,5 +1,9 @@
 # Changelog
 
+## [v3.0.0](https://github.com/uphold/tin-validator/releases/tag/v3.0.0) (2026-09-15)
+
+- Add support for `validators` on `NL` TINs [\#33](https://github.com/uphold/tin-validator/pull/33) ([Megamind51](https://github.com/Megamind51))
+
 ## [v2.6.0](https://github.com/uphold/tin-validator/releases/tag/v2.6.0) (2026-04-15)
 
 - Add `standardize` method [\#32](https://github.com/uphold/tin-validator/pull/32) ([KevinUphold](https://github.com/KevinUphold))
