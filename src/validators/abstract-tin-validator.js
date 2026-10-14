@@ -36,6 +36,14 @@ class AbstractTinValidator {
   sanitize() {
     throw new Error('Method not implemented');
   }
+
+  /**
+   * Standardize.
+   */
+
+  standardize() {
+    throw new Error('Method not implemented');
+  }
 }
 
 /**

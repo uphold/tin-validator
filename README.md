@@ -127,7 +127,7 @@ _(string)_: Returns the standardized value.
 standardize('123A', { country: 'MT' });
 // => 0000123A
 
-standardize('123456789');
+standardize('123-45-6789');
 // => 123456789
 ```
 

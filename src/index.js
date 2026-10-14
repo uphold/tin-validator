@@ -112,6 +112,10 @@ module.exports.sanitize = (value, { country = defaultCountry, entityType = defau
  */
 
 module.exports.standardize = (value, { country = defaultCountry, entityType = defaultEntityType } = {}) => {
+  if (usTinValidator.isCountrySupported(country)) {
+    return usTinValidator.standardize(value);
+  }
+
   if (euTinValidator.isCountrySupported(country)) {
     return euTinValidator.standardize(value, { country, entityType });
   }
