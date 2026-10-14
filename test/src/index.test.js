@@ -165,6 +165,18 @@ describe('tin-validator', () => {
   });
 
   describe('standardize()', () => {
+    it('should call `usTinValidator.standardize()` if `country` is `US`', async () => {
+      vi.spyOn(euTinValidator, 'standardize');
+      vi.spyOn(usTinValidator, 'standardize');
+
+      const normalizedValue = await tinValidator.standardize('123-45-6789');
+
+      expect(normalizedValue).toBe('123456789');
+      expect(usTinValidator.standardize).toHaveBeenCalledTimes(1);
+      expect(usTinValidator.standardize).toHaveBeenCalledWith('123-45-6789');
+      expect(euTinValidator.standardize).not.toHaveBeenCalled();
+    });
+
     it('should call `euTinValidator.standardize()` if `country` is an EU member', async () => {
       const value = '12345678901';
       const country = 'BE';
@@ -178,7 +190,7 @@ describe('tin-validator', () => {
       expect(euTinValidator.standardize).toHaveBeenCalledWith(value, { country, entityType: 'natural-person' });
     });
 
-    it('should return same value if `country` is not an EU member', async () => {
+    it('should return same value if `country` is not supported', async () => {
       const value = 'foobar';
       const country = 'foo';
 

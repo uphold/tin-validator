@@ -85,4 +85,14 @@ describe('USTinValidator', () => {
       expect(usTinValidator.sanitize('  1234  /-  ABC ')).toBe('1234');
     });
   });
+
+  describe('standardize()', () => {
+    it('should return the sanitized value', () => {
+      vi.spyOn(usTinValidator, 'sanitize');
+
+      expect(usTinValidator.standardize('123-45-6789')).toBe('123456789');
+      expect(usTinValidator.sanitize).toHaveBeenCalledTimes(1);
+      expect(usTinValidator.sanitize).toHaveBeenCalledWith('123-45-6789');
+    });
+  });
 });

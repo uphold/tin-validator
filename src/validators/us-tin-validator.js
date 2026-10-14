@@ -63,6 +63,14 @@ class USTinValidator extends AbstractTinValidator {
   sanitize(value) {
     return String(value).replace(/\D+/g, '');
   }
+
+  /**
+   * Standardize.
+   */
+
+  standardize(value) {
+    return this.sanitize(value);
+  }
 }
 
 /**
