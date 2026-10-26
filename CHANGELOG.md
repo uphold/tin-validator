@@ -1,4 +1,8 @@
+# Changelog
 
+## [v3.1.0](https://github.com/uphold/tin-validator/releases/tag/v3.1.0) (2026-10-26)
+
+- Add `standardize` support for US TINs [\#34](https://github.com/uphold/tin-validator/pull/34) ([Nethanos](https://github.com/Nethanos))
 
 ## [v3.0.0](https://github.com/uphold/tin-validator/releases/tag/v3.0.0) (2026-09-15)
 
