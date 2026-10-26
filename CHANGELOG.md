@@ -1,4 +1,4 @@
-# Changelog
+
 
 ## [v3.0.0](https://github.com/uphold/tin-validator/releases/tag/v3.0.0) (2026-09-15)
 
